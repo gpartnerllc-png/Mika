@@ -3,152 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Use Intuição | Atacado Premium</title>
+    <title>Atacado | Use Intuição Lingerie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
         body { font-family: 'Montserrat', sans-serif; }
-        .min-order-alert { transition: all 0.3s ease; }
+        .promo-bar { background-color: #000; color: #fff; font-size: 11px; padding: 6px 0; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        .cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .product-img { transition: transform 0.5s ease; }
+        .product-card:hover .product-img { transform: scale(1.05); }
+        .min-order-alert { font-size: 10px; font-weight: bold; text-transform: uppercase; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-white">
 
-    <div id="min-order-bar" class="bg-pink-600 text-white py-2 px-4 sticky top-0 z-[110] text-center text-xs font-bold uppercase tracking-widest">
-        <span id="min-order-text">Pedido mínimo para atacado: R$ 800,00</span>
-    </div>
+    <div class="promo-bar font-bold" id="top-bar">Pedido Mínimo de Atacado: R$ 800,00</div>
 
-    <header class="bg-white border-b z-50 relative">
-        <div class="container mx-auto px-4 py-6 flex justify-between items-center">
-            <div class="text-2xl font-bold tracking-tighter">
-                USE<span class="text-pink-600">INTUIÇÃO</span> <span class="text-[10px] border border-black px-2 py-0.5 ml-2">ATACADO</span>
-            </div>
+    <header class="border-b sticky top-0 bg-white z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex gap-4 md:hidden text-xl"><i class="fa-solid fa-bars"></i></div>
             
-            <div class="flex items-center gap-6">
+            <div class="text-2xl font-bold tracking-tighter text-black uppercase">
+                Use<span class="font-light text-pink-600">Intuição</span>
+            </div>
+
+            <nav class="hidden md:flex gap-8 font-semibold text-[11px] uppercase tracking-widest text-gray-600">
+                <a href="#" class="hover:text-pink-600">Lançamentos</a>
+                <a href="#" class="hover:text-pink-600">Pijamas</a>
+                <a href="#" class="hover:text-pink-600">Conjuntos</a>
+                <a href="#" class="hover:text-pink-600">Contato</a>
+            </nav>
+
+            <div class="flex items-center gap-5">
                 <div class="relative cursor-pointer" onclick="toggleCart()">
-                    <i class="fa-solid fa-cart-shopping text-xl"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-black text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">0</span>
+                    <i class="fa-solid fa-bag-shopping text-2xl"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-pink-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">0</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-10">
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+    <section class="relative h-[50vh] bg-gray-100 overflow-hidden">
+        <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1762972130_bannerMobile1.jpg" class="w-full h-full object-cover object-center" alt="Banner Principal">
+        <div class="absolute inset-0 bg-black/10 flex flex-col justify-center items-center text-white p-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-bold mb-2 uppercase tracking-tighter">Atacado Premium</h2>
+            <p class="text-sm uppercase tracking-widest font-light">Direto da Fábrica para você</p>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-4 py-12">
+        <h3 class="text-center text-xl font-bold mb-10 uppercase tracking-[0.3em] text-gray-800">Catálogo Disponível</h3>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8" id="product-list">
             
-            <div class="bg-white p-2 shadow-sm group">
-                <div class="relative overflow-hidden aspect-[3/4]">
-                    <img src="useintuicao-20230309115601whatsapp_image_2023-03-09_at_11.36.40_e.jpg" class="w-full h-full object-cover">
+            <div class="product-card group">
+                <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
+                    <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1762972130_bannerMobile1.jpg" class="product-img w-full h-full object-cover">
+                    <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="addToCart('Conjunto Silk Rose', 89.90, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1762972130_bannerMobile1.jpg')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
+                    </div>
                 </div>
-                <div class="py-4 text-center">
-                    <h3 class="text-[11px] uppercase tracking-wider text-gray-500">Conjunto Robê e Baby Doll Rose</h3>
-                    <p class="font-bold text-lg mt-1">R$ 89,90 <span class="text-[10px] font-light text-gray-400">/un</span></p>
-                    <button onclick="addToCart('Baby Doll Rose', 89.90, 'useintuicao-20230309115601whatsapp_image_2023-03-09_at_11.36.40_e.jpg')" class="mt-3 w-full border border-black py-2 text-[10px] font-bold hover:bg-black hover:text-white transition uppercase">Adicionar</button>
-                </div>
-            </div>
-
-            <div class="bg-white p-2 shadow-sm group">
-                <div class="relative overflow-hidden aspect-[3/4]">
-                    <img src="useintuicao-20250801100204_096a9221_e0.jpg" class="w-full h-full object-cover">
-                </div>
-                <div class="py-4 text-center">
-                    <h3 class="text-[11px] uppercase tracking-wider text-gray-500">Robê Luxury White</h3>
-                    <p class="font-bold text-lg mt-1">R$ 95,00 <span class="text-[10px] font-light text-gray-400">/un</span></p>
-                    <button onclick="addToCart('Robê White', 95.00, 'useintuicao-20250801100204_096a9221_e0.jpg')" class="mt-3 w-full border border-black py-2 text-[10px] font-bold hover:bg-black hover:text-white transition uppercase">Adicionar</button>
+                <div class="mt-4 text-center">
+                    <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Conjunto Silk Rose</h4>
+                    <p class="font-bold text-base mt-1 text-black">R$ 89,90 <span class="text-[9px] text-gray-400">atacado</span></p>
                 </div>
             </div>
 
-            <div class="bg-white p-2 shadow-sm group">
-                <div class="relative overflow-hidden aspect-[3/4]">
-                    <img src="useintuicao-20250415094215_whatsappimage20250415at090814_e0.jpg" class="w-full h-full object-cover">
+            <div class="product-card group">
+                <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
+                    <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1683132316_bannerPrincipal0.jpg" class="product-img w-full h-full object-cover">
+                    <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="addToCart('Robê Luxury White', 95.00, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1683132316_bannerPrincipal0.jpg')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
+                    </div>
                 </div>
-                <div class="py-4 text-center">
-                    <h3 class="text-[11px] uppercase tracking-wider text-gray-500">Camisola Silk Chocolate</h3>
-                    <p class="font-bold text-lg mt-1">R$ 78,00 <span class="text-[10px] font-light text-gray-400">/un</span></p>
-                    <button onclick="addToCart('Camisola Chocolate', 78.00, 'useintuicao-20250415094215_whatsappimage20250415at090814_e0.jpg')" class="mt-3 w-full border border-black py-2 text-[10px] font-bold hover:bg-black hover:text-white transition uppercase">Adicionar</button>
-                </div>
-            </div>
-
-            <div class="bg-white p-2 shadow-sm group">
-                <div class="relative overflow-hidden aspect-[3/4]">
-                    <img src="useintuicao-20250415094033_whatsappimage20250415at090804_e.jpg" class="w-full h-full object-cover">
-                </div>
-                <div class="py-4 text-center">
-                    <h3 class="text-[11px] uppercase tracking-wider text-gray-500">Pijama Curto Renda Chocolate</h3>
-                    <p class="font-bold text-lg mt-1">R$ 82,00 <span class="text-[10px] font-light text-gray-400">/un</span></p>
-                    <button onclick="addToCart('Pijama Chocolate', 82.00, 'useintuicao-20250415094033_whatsappimage20250415at090804_e.jpg')" class="mt-3 w-full border border-black py-2 text-[10px] font-bold hover:bg-black hover:text-white transition uppercase">Adicionar</button>
+                <div class="mt-4 text-center">
+                    <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Robê Luxury White</h4>
+                    <p class="font-bold text-base mt-1 text-black">R$ 95,00 <span class="text-[9px] text-gray-400">atacado</span></p>
                 </div>
             </div>
 
-            <div class="bg-white p-2 shadow-sm group">
-                <div class="relative overflow-hidden aspect-[3/4]">
-                    <img src="useintuicao-202201201423042.jpg" class="w-full h-full object-cover">
+            <div class="product-card group">
+                <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
+                    <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1684939342_bannerPrincipal1.jpg" class="product-img w-full h-full object-cover">
+                    <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="addToCart('Camisola Chocolate Silk', 79.90, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1684939342_bannerPrincipal1.jpg')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
+                    </div>
                 </div>
-                <div class="py-4 text-center">
-                    <h3 class="text-[11px] uppercase tracking-wider text-gray-500">Conjunto Strappy Lilac</h3>
-                    <p class="font-bold text-lg mt-1">R$ 45,00 <span class="text-[10px] font-light text-gray-400">/un</span></p>
-                    <button onclick="addToCart('Conjunto Lilac', 45.00, 'useintuicao-202201201423042.jpg')" class="mt-3 w-full border border-black py-2 text-[10px] font-bold hover:bg-black hover:text-white transition uppercase">Adicionar</button>
-                </div>
-            </div>
-
-            <div class="bg-white p-2 shadow-sm group">
-                <div class="relative overflow-hidden aspect-[3/4]">
-                    <img src="useintuicao-20230519101319_whatsappimage20230518at162120_e.jpeg" class="w-full h-full object-cover">
-                </div>
-                <div class="py-4 text-center">
-                    <h3 class="text-[11px] uppercase tracking-wider text-gray-500">Conjunto Garden Pink</h3>
-                    <p class="font-bold text-lg mt-1">R$ 48,00 <span class="text-[10px] font-light text-gray-400">/un</span></p>
-                    <button onclick="addToCart('Conjunto Pink Garden', 48.00, 'useintuicao-20230519101319_whatsappimage20230518at162120_e.jpeg')" class="mt-3 w-full border border-black py-2 text-[10px] font-bold hover:bg-black hover:text-white transition uppercase">Adicionar</button>
+                <div class="mt-4 text-center">
+                    <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Camisola Chocolate Silk</h4>
+                    <p class="font-bold text-base mt-1 text-black">R$ 79,90 <span class="text-[9px] text-gray-400">atacado</span></p>
                 </div>
             </div>
 
-            <div class="bg-white p-2 shadow-sm group">
-                <div class="relative overflow-hidden aspect-[3/4]">
-                    <img src="useintuicao-20230313144845whatsapp_image_2023-02-23_at_09.45.41_(1)_e0.jpg" class="w-full h-full object-cover">
+            <div class="product-card group">
+                <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
+                    <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/logo-principal.png" class="product-img w-full h-full object-contain p-4">
+                    <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="addToCart('Conjunto Strappy Lilac', 65.00, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/logo-principal.png')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
+                    </div>
                 </div>
-                <div class="py-4 text-center">
-                    <h3 class="text-[11px] uppercase tracking-wider text-gray-500">Baby Doll Candy Pink</h3>
-                    <p class="font-bold text-lg mt-1">R$ 65,00 <span class="text-[10px] font-light text-gray-400">/un</span></p>
-                    <button onclick="addToCart('Baby Doll Candy', 65.00, 'useintuicao-20230313144845whatsapp_image_2023-02-23_at_09.45.41_(1)_e0.jpg')" class="mt-3 w-full border border-black py-2 text-[10px] font-bold hover:bg-black hover:text-white transition uppercase">Adicionar</button>
-                </div>
-            </div>
-
-            <div class="bg-white p-2 shadow-sm group">
-                <div class="relative overflow-hidden aspect-[3/4]">
-                    <img src="useintuicao-20210719181004ref._3609_(1)_e.jpg" class="w-full h-full object-cover">
-                </div>
-                <div class="py-4 text-center">
-                    <h3 class="text-[11px] uppercase tracking-wider text-gray-500">Baby Doll Green Lace</h3>
-                    <p class="font-bold text-lg mt-1">R$ 68,00 <span class="text-[10px] font-light text-gray-400">/un</span></p>
-                    <button onclick="addToCart('Baby Doll Green', 68.00, 'useintuicao-20210719181004ref._3609_(1)_e.jpg')" class="mt-3 w-full border border-black py-2 text-[10px] font-bold hover:bg-black hover:text-white transition uppercase">Adicionar</button>
+                <div class="mt-4 text-center">
+                    <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Conjunto Strappy Lilac</h4>
+                    <p class="font-bold text-base mt-1 text-black">R$ 65,00 <span class="text-[9px] text-gray-400">atacado</span></p>
                 </div>
             </div>
 
         </div>
     </main>
 
-    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-80 bg-white shadow-2xl z-[200] translate-x-full transition-transform duration-300 flex flex-col">
-        <div class="p-4 bg-black text-white flex justify-between items-center italic">
-            <span class="text-xs font-bold uppercase tracking-tighter">Pedido de Atacado</span>
-            <button onclick="toggleCart()" class="text-2xl">&times;</button>
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl z-[100] translate-x-full cart-sidebar flex flex-col">
+        <div class="p-6 border-b flex justify-between items-center bg-gray-50">
+            <h2 class="font-bold uppercase tracking-widest text-sm text-pink-600">Pedido de Atacado</h2>
+            <button onclick="toggleCart()" class="text-2xl hover:rotate-90 transition-transform">&times;</button>
         </div>
         
-        <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+        <div id="cart-content" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <p class="text-gray-400 text-center py-10 uppercase text-[10px]">Sua sacola está vazia.</p>
+        </div>
 
-        <div class="p-4 border-t bg-gray-50">
+        <div class="p-6 border-t bg-white">
             <div class="flex justify-between font-bold text-lg mb-2">
-                <span>Total:</span>
-                <span id="cart-total" class="text-pink-600">R$ 0,00</span>
+                <span class="text-gray-500 text-sm uppercase">Subtotal:</span>
+                <span id="cart-total" class="text-black">R$ 0,00</span>
             </div>
-            <div id="min-order-warning" class="text-[10px] text-red-500 mb-4 font-bold uppercase text-center">
-                Faltam R$ 800,00 para atingir o pedido mínimo.
+            
+            <div id="min-order-msg" class="bg-gray-100 p-3 text-center mb-4 min-order-alert text-red-600">
+                Faltam R$ 800,00 para o mínimo
             </div>
-            <button id="checkout-btn" disabled class="w-full bg-gray-300 text-white py-4 font-bold uppercase text-xs cursor-not-allowed">Finalizar Pedido</button>
+
+            <button id="btn-checkout" disabled onclick="goToCheckout()" class="w-full bg-gray-300 text-white py-4 font-bold uppercase text-xs tracking-widest cursor-not-allowed transition-all">
+                Finalizar Compra
+            </button>
+            <p class="text-[9px] text-center mt-3 text-gray-400 uppercase tracking-widest font-bold italic">Check-out via InfinitePay ou Yampi</p>
         </div>
     </div>
 
     <script>
         let cart = [];
+        let total = 0;
         const MIN_ORDER = 800;
 
         function toggleCart() {
@@ -157,50 +150,71 @@
 
         function addToCart(name, price, img) {
             cart.push({name, price, img});
-            renderCart();
-            if(!document.getElementById('cart-sidebar').classList.contains('translate-x-0')) toggleCart();
+            updateCart();
+            if(document.getElementById('cart-sidebar').classList.contains('translate-x-full')) {
+                toggleCart();
+            }
         }
 
-        function renderCart() {
-            const itemsContainer = document.getElementById('cart-items');
-            const totalElement = document.getElementById('cart-total');
-            const btn = document.getElementById('checkout-btn');
-            const warning = document.getElementById('min-order-warning');
-            const barText = document.getElementById('min-order-text');
+        function updateCart() {
+            const cartContent = document.getElementById('cart-content');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+            const btn = document.getElementById('btn-checkout');
+            const msg = document.getElementById('min-order-msg');
             
-            itemsContainer.innerHTML = '';
-            let total = 0;
-
-            cart.forEach((item, index) => {
-                total += item.price;
-                itemsContainer.innerHTML += `
-                    <div class="flex gap-3 items-center border-b pb-2">
-                        <img src="${item.img}" class="w-12 h-16 object-cover">
-                        <div class="flex-1">
-                            <h4 class="text-[9px] font-bold uppercase">${item.name}</h4>
-                            <p class="text-xs font-bold">R$ ${item.price.toFixed(2)}</p>
+            if(cart.length === 0) {
+                cartContent.innerHTML = '<p class="text-gray-400 py-10 text-center uppercase text-[10px]">Sua sacola está vazia.</p>';
+                total = 0;
+            } else {
+                cartContent.innerHTML = '';
+                total = 0;
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    cartContent.innerHTML += `
+                        <div class="flex gap-4 items-center border-b pb-4">
+                            <img src="${item.img}" class="w-12 h-16 object-cover bg-gray-50">
+                            <div class="flex-1 text-left">
+                                <h4 class="text-[10px] font-bold uppercase leading-tight">${item.name}</h4>
+                                <p class="text-pink-600 font-bold text-sm">R$ ${item.price.toFixed(2)}</p>
+                                <button onclick="removeItem(${index})" class="text-[9px] text-gray-400 underline uppercase mt-1">Remover</button>
+                            </div>
                         </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
 
-            totalElement.innerText = `R$ ${total.toFixed(2)}`;
-            document.getElementById('cart-count').innerText = cart.length;
+            // Atualização de Valores e Travas
+            cartCount.innerText = cart.length;
+            cartTotal.innerText = `R$ ${total.toFixed(2)}`;
 
             if(total >= MIN_ORDER) {
                 btn.disabled = false;
                 btn.classList.remove('bg-gray-300', 'cursor-not-allowed');
-                btn.classList.add('bg-pink-600', 'hover:bg-pink-700');
-                warning.innerHTML = "✓ Pedido mínimo atingido!";
-                warning.classList.replace('text-red-500', 'text-green-600');
-                barText.innerText = "Pedido mínimo atingido! Aproveite o frete grátis.";
+                btn.classList.add('bg-black', 'hover:bg-gray-800');
+                msg.innerText = "✓ Pedido mínimo atingido!";
+                msg.classList.remove('text-red-600', 'bg-gray-100');
+                msg.classList.add('text-green-600', 'bg-green-50');
             } else {
                 btn.disabled = true;
                 const falta = MIN_ORDER - total;
-                warning.innerHTML = `Faltam R$ ${falta.toFixed(2)} para o mínimo.`;
                 btn.classList.add('bg-gray-300', 'cursor-not-allowed');
-                btn.classList.remove('bg-pink-600');
+                btn.classList.remove('bg-black');
+                msg.innerText = `Faltam R$ ${falta.toFixed(2)} para o mínimo`;
+                msg.classList.add('text-red-600', 'bg-gray-100');
+                msg.classList.remove('text-green-600', 'bg-green-50');
             }
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function goToCheckout() {
+            // Link de Integração com Yampi ou InfinitePay
+            const checkoutUrl = "https://seu-checkout.yampi.com.br/finalizar"; 
+            window.location.href = checkoutUrl;
         }
     </script>
 </body>
