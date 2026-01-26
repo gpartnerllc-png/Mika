@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace Express - Venda Livre</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        .cart-badge { position: absolute; top: -5px; right: -10px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; }
+        .product-card:hover { transform: translateY(-5px); transition: 0.3s; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-indigo-600">MODA<span class="text-gray-900">LIVRE</span></h1>
+            
+            <div class="flex-1 mx-10 hidden md:block">
+                <input type="text" placeholder="Buscar produtos..." class="w-full border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-300">
+            </div>
+
+            <div class="flex items-center gap-6">
+                <a href="#" class="hover:text-indigo-600"><i class="fa-regular fa-user"></i> Entrar</a>
+                <div class="relative cursor-pointer" onclick="toggleCart()">
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    <span id="cart-count" class="cart-badge">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="bg-indigo-600 text-white py-12 text-center">
+        <h2 class="text-4xl font-bold mb-2">Novidades da Estação</h2>
+        <p class="text-indigo-100">Compre sem restrições e receba em casa.</p>
+    </section>
+
+    <main class="container mx-auto px-4 py-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8" id="product-grid">
+            <div class="bg-white rounded-lg shadow product-card overflow-hidden">
+                <img src="https://via.placeholder.com/300x400" alt="Produto" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <span class="text-xs text-gray-500 uppercase">Referência: 1001</span>
+                    <h3 class="font-semibold text-lg mt-1">Vestido Elegance Floral</h3>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-xl font-bold text-green-600">R$ 149,90</span>
+                        <button onclick="addToCart('Vestido Elegance', 149.90)" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow product-card overflow-hidden">
+                <img src="https://via.placeholder.com/300x400" alt="Produto" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <span class="text-xs text-gray-500 uppercase">Referência: 1002</span>
+                    <h3 class="font-semibold text-lg mt-1">Conjunto Verão Casual</h3>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-xl font-bold text-green-600">R$ 89,00</span>
+                        <button onclick="addToCart('Conjunto Verão', 89.00)" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+    </main>
+
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-80 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-[60]">
+        <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+            <h2 class="font-bold">Meu Carrinho</h2>
+            <button onclick="toggleCart()" class="text-2xl">&times;</button>
+        </div>
+        <div id="cart-items" class="p-4 h-3/4 overflow-y-auto">
+            <p class="text-gray-400 text-center mt-10">Carrinho vazio</p>
+        </div>
+        <div class="p-4 border-t absolute bottom-0 w-full bg-white">
+            <div class="flex justify-between font-bold mb-4">
+                <span>Total:</span>
+                <span id="cart-total">R$ 0,00</span>
+            </div>
+            <button onclick="checkout()" class="w-full bg-green-500 text-white py-3 rounded-lg font-bold hover:bg-green-600">
+                Pagar Agora
+            </button>
+        </div>
+    </div>
+
+    <footer class="bg-gray-900 text-white py-10 mt-20">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+            <div>
+                <h4 class="font-bold mb-4">Sobre a Loja</h4>
+                <p class="text-gray-400 text-sm">O melhor marketplace de moda com liberdade total de compra e pagamento facilitado.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4">Links Úteis</h4>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li><a href="#" class="hover:text-white">Trocas e Devoluções</a></li>
+                    <li><a href="#" class="hover:text-white">Privacidade</a></li>
+                    <li><a href="#" class="hover:text-white">Trabalhe Conosco</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4">Pagamento Seguro</h4>
+                <div class="flex justify-center md:justify-start gap-4 text-2xl text-gray-400">
+                    <i class="fa-brands fa-cc-visa"></i>
+                    <i class="fa-brands fa-cc-mastercard"></i>
+                    <i class="fa-brands fa-pix"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.classList.toggle('translate-x-full');
+        }
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            updateCart();
+            if(document.getElementById('cart-sidebar').classList.contains('translate-x-full')) {
+                toggleCart();
+            }
+        }
+
+        function updateCart() {
+            const cartList = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartList.innerHTML = '';
+            total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                cartList.innerHTML += `
+                    <div class="flex justify-between items-center mb-3 p-2 bg-gray-50 rounded">
+                        <div>
+                            <p class="font-semibold text-sm">${item.name}</p>
+                            <p class="text-green-600 text-xs text-bold">R$ ${item.price.toFixed(2)}</p>
+                        </div>
+                        <button onclick="removeItem(${index})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+
+            cartCount.innerText = cart.length;
+            cartTotal.innerText = `R$ ${total.toFixed(2)}`;
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function checkout() {
+            if(cart.length === 0) return alert("Seu carrinho está vazio!");
+            alert("Redirecionando para o Checkout Seguro...\nTotal: R$ " + total.toFixed(2));
+            // Aqui você integraria com Stripe, Mercado Pago ou WhatsApp
+        }
+    </script>
+</body>
+</html>

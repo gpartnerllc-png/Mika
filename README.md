@@ -1,2 +1,0 @@
-# Mika
-Mika Modas
