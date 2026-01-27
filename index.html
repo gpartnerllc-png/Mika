@@ -18,7 +18,7 @@
 </head>
 <body class="bg-white">
 
-    <div class="promo-bar font-bold" id="top-bar">ATACADO - Pedido Mínimo: R$ 800,00</div>
+    <div class="promo-bar font-bold" id="top-bar">ATACADO - Pedido Mínimo: R$ 200,00</div>
 
     <header class="border-b sticky top-0 bg-white z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -42,7 +42,7 @@
     </header>
 
     <section class="relative h-[50vh] bg-gray-100 overflow-hidden">
-        <img src="https://r.jina.ai/i/06f7b1597f75476a88b57790b83e606a" class="w-full h-full object-cover object-center" alt="Banner Atacado Premium">
+        <img src="20250820175544_intuicao3_48_e.jpg" class="w-full h-full object-cover object-center" alt="Banner Atacado Premium">
         <div class="absolute inset-0 bg-black/10 flex flex-col justify-center items-center text-white p-4 text-center">
             <h2 class="text-3xl md:text-5xl font-bold mb-2 uppercase tracking-tighter">Atacado Premium</h2>
             <p class="text-sm uppercase tracking-widest font-light">Direto da Fábrica para você</p>
@@ -56,9 +56,9 @@
             
             <div class="product-card group">
                 <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
-                    <img src="useintuicao-20240926115858_whatsappimage20240926at09522928329_e (1).jpeg" class="product-img w-full h-full object-cover">
+                    <img src="20250820155538_intuicao3_67_e.jpg" class="product-img w-full h-full object-cover">
                     <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="addToCart('Body Manga Longa (Estampado)', 125.90, 'useintuicao-20240926115858_whatsappimage20240926at09522928329_e (1).jpeg')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
+                        <button onclick="addToCart('Body Manga Longa (Estampado)', 125.90, '20250820155538_intuicao3_67_e.jpg')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
                     </div>
                 </div>
                 <div class="mt-4 text-center px-2">
@@ -133,8 +133,8 @@
                     <p class="font-bold text-base mt-1 text-black">R$ 58,90 <span class="text-[9px] text-gray-400">atacado</span></p>
                 </div>
             </div>
-            
-            </div>
+
+        </div>
     </main>
 
     <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl z-[100] translate-x-full cart-sidebar flex flex-col">
@@ -154,7 +154,7 @@
             </div>
             
             <div id="min-order-msg" class="bg-gray-100 p-3 text-center mb-4 min-order-alert text-red-600">
-                Faltam R$ 800,00 para o mínimo
+                Faltam R$ 200,00 para o mínimo
             </div>
 
             <div class="flex flex-col gap-2">
@@ -244,18 +244,11 @@
             updateCart();
         }
 
-        // INTEGRAÇÃO GATEWAYS
         function checkoutYampi() {
-            // A Yampi geralmente recebe os itens via URL codificada ou API. 
-            // Exemplo de redirecionamento simples para o checkout:
-            const checkoutUrl = "https://seu-checkout.yampi.com.br/finalizar"; 
-            window.location.href = checkoutUrl;
+            window.location.href = "https://seu-checkout.yampi.com.br/finalizar"; 
         }
 
         function checkoutInfinitePay() {
-            // A InfinitePay funciona via link de pagamento ou API.
-            // Aqui você integraria a chamada do seu link fixo ou geração dinâmica.
-            alert("Redirecionando para o ambiente seguro da InfinitePay...");
             window.location.href = "https://pay.infinitepay.io/miquelymodas"; 
         }
     </script>
