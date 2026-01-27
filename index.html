@@ -14,6 +14,9 @@
         .product-img { transition: transform 0.5s ease; }
         .product-card:hover .product-img { transform: scale(1.05); }
         .min-order-alert { font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        /* Infra do Carrossel */
+        #main-carousel img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease-in-out; }
+        #main-carousel img.active { opacity: 1; }
     </style>
 </head>
 <body class="bg-white">
@@ -23,15 +26,12 @@
     <header class="border-b sticky top-0 bg-white z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex gap-4 md:hidden text-xl"><i class="fa-solid fa-bars"></i></div>
-            
             <div class="text-2xl font-bold tracking-tighter text-black uppercase">
                 Miquely<span class="font-light text-pink-600">Modas</span>
             </div>
-
             <nav class="hidden md:flex gap-8 font-semibold text-[11px] uppercase tracking-widest text-gray-600">
                 <a href="#" class="hover:text-pink-600">Contato</a>
             </nav>
-
             <div class="flex items-center gap-5">
                 <div class="relative cursor-pointer" onclick="toggleCart()">
                     <i class="fa-solid fa-bag-shopping text-2xl"></i>
@@ -41,11 +41,12 @@
         </div>
     </header>
 
-    <section class="relative h-[50vh] bg-gray-100 overflow-hidden">
-        <img src="20250820175544_intuicao3_48_e.jpg" class="w-full h-full object-cover object-center" alt="Banner Atacado Premium">
-        <div class="absolute inset-0 bg-black/10 flex flex-col justify-center items-center text-white p-4 text-center">
-            <h2 class="text-3xl md:text-5xl font-bold mb-2 uppercase tracking-tighter">Atacado Premium</h2>
-            <p class="text-sm uppercase tracking-widest font-light">Direto da Fábrica para você</p>
+    <section class="relative h-[55vh] md:h-[75vh] bg-gray-200 overflow-hidden" id="main-carousel">
+        <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1765913728_bannerPrincipal2.jpg" class="active">
+        <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1762972131_bannerPrincipal2.jpg">
+        <div class="absolute inset-0 bg-black/20 flex flex-col justify-center items-center text-white p-4 text-center z-10">
+            <h2 class="text-3xl md:text-6xl font-bold mb-2 uppercase tracking-tighter">Nova Coleção</h2>
+            <p class="text-sm uppercase tracking-widest font-light bg-black/40 px-4 py-1">Atacado Premium Miquely Modas</p>
         </div>
     </section>
 
@@ -64,7 +65,6 @@
                 <div class="mt-4 text-center px-2">
                     <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Body Manga Longa</h4>
                     <p class="text-[9px] text-pink-600 font-bold uppercase mt-1">Cappuccino | Angel | Amor</p>
-                    <p class="text-[8px] text-gray-400">P - M - G</p>
                     <p class="font-bold text-base mt-1 text-black">R$ 125,90 <span class="text-[9px] text-gray-400">atacado</span></p>
                 </div>
             </div>
@@ -78,62 +78,85 @@
                 </div>
                 <div class="mt-4 text-center">
                     <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Cropped Babado</h4>
-                    <p class="font-bold text-base mt-1 text-black">R$ 75,00 <span class="text-[9px] text-gray-400">atacado</span></p>
+                    <p class="font-bold text-base mt-1 text-black">R$ 75,00</p>
                 </div>
             </div>
 
-            <div class="product-card group">
-                <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
-                    <img src="20250924134802_intuicaoset25_26_e.jpg" class="product-img w-full h-full object-cover">
-                    <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="addToCart('Conjunto Intuição Luxo', 139.90, '20250924134802_intuicaoset25_26_e.jpg')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
-                    </div>
-                </div>
-                <div class="mt-4 text-center">
-                    <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Conjunto Intuição Luxo</h4>
-                    <p class="font-bold text-base mt-1 text-black">R$ 139,90 <span class="text-[9px] text-gray-400">atacado</span></p>
-                </div>
-            </div>
+            <script>
+                const extraImages = [
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4132_(3)_ec.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/2022101311531022506_(6)_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206113500_img_7362_e1.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114055_img_7370_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20210629160317ref._4004_(1)_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230330090806whatsapp_image_2023-03-30_at_08.49.20_e1.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20251202095430_intuicao_30_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/20250522113207_img_7152_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4111_(2)_ec.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230519102154_whatsappimage20230519at10183828129_e.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/9/20231117163638_whatsappimage20231117at150951_e.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/1/20251006155146_intuicao_31_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/20231120104222_whatsappimage20231117at104556_e.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250821134227_whatsappimage20250821at120153_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20251202101449_intuicao_1728129_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250821090129_intuicao3_5_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/1/20251218144817_intuicaodez25_31_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206122501_img_7426_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250725112922_whatsappimage20250723at170229_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/26/20250820175544_intuicao3_48_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/25/20250522105424_img_7142_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/7/20250820173918_intuicao3_24_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/25/20251218112643_intuicaodez25_7_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/21/20251006162203_intuicao_17_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/2/20250821095001_intuicao3_8_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/17/20250801100605_img_8262_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/7/20251007082926_intuicao_14_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114319_img_7343_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20250801093940_096a9085_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250715111609_img_8266_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20250909153843_intuicaoset25_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250909141405_intuicaoset25_23_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/2/20250909143127_intuicaoset25_49_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250909144502_intuicaoset25_43_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20251007082031_intuicao_3_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250522101047_img_716828129_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820164925_intuicao3_42_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/20250821084610_intuicao3_27_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820162500_intuicao3_32_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/6/20220307160240whatsapp_image_2022-03-07_at_14.56.51_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1717558113.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716580958.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716578271.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1726157437.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716834000.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20240517104309_whatsappimage20240517at10183128129_e.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20231002174846_whatsappimage20231002at174112_e.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20240517102516_whatsappimage20240517at101916_e.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230911095939_whatsappimage20230904at105708_e.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818142755_whatsappimage20230818at141504_e.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623165155_whatsappimage20230623at14352228229_e.jpg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230815143028_whatsappimage20230815at142018_e.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818144857_whatsappimage20230818at140055_e.jpeg",
+                    "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg"
+                ];
 
-            <div class="product-card group">
-                <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
-                    <img src="20250820173918_intuicao3_24_e.jpg" class="product-img w-full h-full object-cover">
-                    <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="addToCart('Lingerie Sofisticada', 85.00, '20250820173918_intuicao3_24_e.jpg')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
-                    </div>
-                </div>
-                <div class="mt-4 text-center">
-                    <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Lingerie Sofisticada</h4>
-                    <p class="font-bold text-base mt-1 text-black">R$ 85,00 <span class="text-[9px] text-gray-400">atacado</span></p>
-                </div>
-            </div>
-
-            <div class="product-card group">
-                <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
-                    <img src="20250821084610_intuicao3_27_e.jpg" class="product-img w-full h-full object-cover">
-                    <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="addToCart('Conjunto Design Autoral', 115.00, '20250821084610_intuicao3_27_e.jpg')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
-                    </div>
-                </div>
-                <div class="mt-4 text-center">
-                    <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Conjunto Design Autoral</h4>
-                    <p class="font-bold text-base mt-1 text-black">R$ 115,00 <span class="text-[9px] text-gray-400">atacado</span></p>
-                </div>
-            </div>
-
-            <div class="product-card group">
-                <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
-                    <img src="20250821095001_intuicao3_8_e.jpg" class="product-img w-full h-full object-cover">
-                    <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="addToCart('Lingerie Casual', 58.90, '20250821095001_intuicao3_8_e.jpg')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
-                    </div>
-                </div>
-                <div class="mt-4 text-center">
-                    <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Lingerie Casual</h4>
-                    <p class="font-bold text-base mt-1 text-black">R$ 58,90 <span class="text-[9px] text-gray-400">atacado</span></p>
-                </div>
-            </div>
-
+                const list = document.getElementById('product-list');
+                extraImages.forEach((url, i) => {
+                    list.innerHTML += `
+                    <div class="product-card group">
+                        <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
+                            <img src="${url}" class="product-img w-full h-full object-cover">
+                            <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="addToCart('Lingerie Ref ${800 + i}', 115.00, '${url}')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar ao Pedido</button>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center px-2">
+                            <h4 class="text-[11px] text-gray-500 uppercase font-semibold">Peça Coleção Premium</h4>
+                            <p class="font-bold text-base mt-1 text-black">R$ 115,00 <span class="text-[9px] text-gray-400">atacado</span></p>
+                        </div>
+                    </div>`;
+                });
+            </script>
         </div>
     </main>
 
@@ -142,36 +165,40 @@
             <h2 class="font-bold uppercase tracking-widest text-sm text-pink-600">Pedido de Atacado</h2>
             <button onclick="toggleCart()" class="text-2xl hover:rotate-90 transition-transform">&times;</button>
         </div>
-        
         <div id="cart-content" class="flex-1 overflow-y-auto p-6 space-y-4">
             <p class="text-gray-400 text-center py-10 uppercase text-[10px]">Sua sacola está vazia.</p>
         </div>
-
         <div class="p-6 border-t bg-white">
             <div class="flex justify-between font-bold text-lg mb-2">
                 <span class="text-gray-500 text-sm uppercase">Subtotal:</span>
                 <span id="cart-total" class="text-black">R$ 0,00</span>
             </div>
-            
             <div id="min-order-msg" class="bg-gray-100 p-3 text-center mb-4 min-order-alert text-red-600">
                 Faltam R$ 200,00 para o mínimo
             </div>
-
             <div class="flex flex-col gap-2">
-                <button id="btn-checkout-yampi" disabled onclick="checkoutYampi()" class="w-full bg-gray-300 text-white py-4 font-bold uppercase text-xs tracking-widest cursor-not-allowed transition-all">
+                <button id="btn-checkout-yampi" disabled onclick="checkoutYampi()" class="w-full bg-gray-300 text-white py-4 font-bold uppercase text-xs tracking-widest cursor-not-allowed">
                     Finalizar via Yampi
                 </button>
-                <button id="btn-checkout-infinite" disabled onclick="checkoutInfinitePay()" class="w-full bg-gray-300 text-white py-3 font-bold uppercase text-[10px] tracking-widest cursor-not-allowed transition-all border border-black !text-black bg-transparent">
+                <button id="btn-checkout-infinite" disabled onclick="checkoutInfinitePay()" class="w-full bg-gray-300 text-white py-3 font-bold uppercase text-[10px] tracking-widest cursor-not-allowed border border-black !text-black bg-transparent">
                     Pagar com InfinitePay
                 </button>
             </div>
-            <p class="text-[9px] text-center mt-3 text-gray-400 uppercase tracking-widest font-bold italic text-pretty">Pagamento seguro via Gateway Oficial</p>
         </div>
     </div>
 
     <script>
+        // Logica do Carrossel de Fachada
+        const bannerSlides = document.querySelectorAll('#main-carousel img');
+        let currentSlide = 0;
+        setInterval(() => {
+            bannerSlides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % bannerSlides.length;
+            bannerSlides[currentSlide].classList.add('active');
+        }, 4500);
+
+        // Infra Original do Carrinho
         let cart = [];
-        let total = 0;
         const MIN_ORDER = 200;
 
         function toggleCart() {
@@ -181,76 +208,54 @@
         function addToCart(name, price, img) {
             cart.push({name, price, img});
             updateCart();
-            if(document.getElementById('cart-sidebar').classList.contains('translate-x-full')) {
-                toggleCart();
-            }
+            if(document.getElementById('cart-sidebar').classList.contains('translate-x-full')) toggleCart();
         }
 
         function updateCart() {
-            const cartContent = document.getElementById('cart-content');
-            const cartCount = document.getElementById('cart-count');
-            const cartTotal = document.getElementById('cart-total');
-            const btnYampi = document.getElementById('btn-checkout-yampi');
-            const btnInfinite = document.getElementById('btn-checkout-infinite');
+            const content = document.getElementById('cart-content');
+            const totalEl = document.getElementById('cart-total');
             const msg = document.getElementById('min-order-msg');
+            const count = document.getElementById('cart-count');
+            const btnY = document.getElementById('btn-checkout-yampi');
+            const btnI = document.getElementById('btn-checkout-infinite');
             
-            if(cart.length === 0) {
-                cartContent.innerHTML = '<p class="text-gray-400 py-10 text-center uppercase text-[10px]">Sua sacola está vazia.</p>';
-                total = 0;
-            } else {
-                cartContent.innerHTML = '';
-                total = 0;
-                cart.forEach((item, index) => {
-                    total += item.price;
-                    cartContent.innerHTML += `
-                        <div class="flex gap-4 items-center border-b pb-4">
-                            <img src="${item.img}" class="w-12 h-16 object-cover bg-gray-50">
-                            <div class="flex-1 text-left">
-                                <h4 class="text-[10px] font-bold uppercase leading-tight">${item.name}</h4>
-                                <p class="text-pink-600 font-bold text-sm">R$ ${item.price.toFixed(2)}</p>
-                                <button onclick="removeItem(${index})" class="text-[9px] text-gray-400 underline uppercase mt-1">Remover</button>
-                            </div>
+            let total = 0;
+            content.innerHTML = cart.length ? '' : '<p class="text-gray-400 py-10 text-center uppercase text-[10px]">Sua sacola está vazia.</p>';
+            
+            cart.forEach((item, i) => {
+                total += item.price;
+                content.innerHTML += `
+                    <div class="flex gap-4 items-center border-b pb-4">
+                        <img src="${item.img}" class="w-12 h-16 object-cover bg-gray-50">
+                        <div class="flex-1 text-left">
+                            <h4 class="text-[10px] font-bold uppercase leading-tight">${item.name}</h4>
+                            <p class="text-pink-600 font-bold text-sm">R$ ${item.price.toFixed(2)}</p>
+                            <button onclick="removeItem(${i})" class="text-[9px] text-gray-400 underline uppercase mt-1">Remover</button>
                         </div>
-                    `;
-                });
-            }
+                    </div>`;
+            });
 
-            cartCount.innerText = cart.length;
-            cartTotal.innerText = `R$ ${total.toFixed(2)}`;
+            totalEl.innerText = `R$ ${total.toFixed(2)}`;
+            count.innerText = cart.length;
 
             if(total >= MIN_ORDER) {
-                [btnYampi, btnInfinite].forEach(btn => {
-                    btn.disabled = false;
-                    btn.classList.remove('bg-gray-300', 'cursor-not-allowed');
-                });
-                btnYampi.classList.add('bg-black', 'hover:bg-gray-800');
+                btnY.disabled = false; btnI.disabled = false;
+                btnY.classList.replace('bg-gray-300', 'bg-black');
+                btnI.classList.remove('bg-gray-300', 'cursor-not-allowed');
                 msg.innerText = "✓ Pedido mínimo atingido!";
-                msg.classList.replace('text-red-600', 'text-green-600');
-                msg.classList.replace('bg-gray-100', 'bg-green-50');
+                msg.className = "bg-green-50 p-3 text-center mb-4 min-order-alert text-green-600";
             } else {
-                [btnYampi, btnInfinite].forEach(btn => {
-                    btn.disabled = true;
-                    btn.classList.add('bg-gray-300', 'cursor-not-allowed');
-                });
-                const falta = MIN_ORDER - total;
-                msg.innerText = `Faltam R$ ${falta.toFixed(2)} para o mínimo`;
-                msg.classList.replace('text-green-600', 'text-red-600');
-                msg.classList.replace('bg-green-50', 'bg-gray-100');
+                btnY.disabled = true; btnI.disabled = true;
+                btnY.classList.replace('bg-black', 'bg-gray-300');
+                btnI.classList.add('bg-gray-300', 'cursor-not-allowed');
+                msg.innerText = `Faltam R$ ${(MIN_ORDER - total).toFixed(2)} para o mínimo`;
+                msg.className = "bg-gray-100 p-3 text-center mb-4 min-order-alert text-red-600";
             }
         }
 
-        function removeItem(index) {
-            cart.splice(index, 1);
-            updateCart();
-        }
-
-        function checkoutYampi() {
-            window.location.href = "https://seu-checkout.yampi.com.br/finalizar"; 
-        }
-
-        function checkoutInfinitePay() {
-            window.location.href = "https://pay.infinitepay.io/miquelymodas"; 
-        }
+        function removeItem(i) { cart.splice(i, 1); updateCart(); }
+        function checkoutYampi() { window.location.href = "https://seu-checkout.yampi.com.br/finalizar"; }
+        function checkoutInfinitePay() { window.location.href = "https://pay.infinitepay.io/miquelymodas"; }
     </script>
 </body>
 </html>
