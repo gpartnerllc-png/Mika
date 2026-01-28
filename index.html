@@ -170,33 +170,60 @@
         }
 
 async function finalizarPagamentoAppmax() {
-    const totalRaw = document.getElementById('cart-total').innerText;
-    // Converte R$ 1.035,00 em 1035.00
-    const totalNum = parseFloat(totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.'));
+    const btn = document.getElementById('btn-checkout-appmax');
+    const originalText = btn.innerText;
+    
+    // 1. ACRESCENTADO: Feedback visual de carregamento
+    btn.innerText = "PROCESSANDO PEDIDO...";
+    btn.disabled = true;
 
-    const payload = {
-        total: totalNum,
-        products: cart.map(item => ({
-            name: item.name,
-            qty: 1,
-            price: item.price
-        }))
-    };
+    try {
+        const totalRaw = document.getElementById('cart-total').innerText;
+        // Converte R$ 1.035,00 em 1035.00
+        const totalNum = parseFloat(totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.'));
 
-    // COLOQUE O LINK QUE A AWS VAI TE DAR AQUI:
-    const awsEndpoint = 'https://org3zgdxvga5sb377l7yjgyfuu0wmapq.lambda-url.sa-east-1.on.aws';
+        const payload = {
+            total: totalNum,
+            products: cart.map(item => ({
+                name: item.name,
+                qty: 1,
+                price: item.price
+            }))
+        };
 
-    const response = await fetch(awsEndpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // ESSENCIAL para a AWS aceitar o comando
-        },
-        body: JSON.stringify(payload)
-    });
+        const awsEndpoint = 'https://org3zgdxvga5sb377l7yjgyfuu0wmapq.lambda-url.sa-east-1.on.aws';
 
-    const result = await response.json();
-    if (result.url) {
-        window.location.href = result.url; // Abre o checkout com o valor certo
+        const response = await fetch(awsEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        // 2. ACRESCENTADO: Verificação se a AWS respondeu com sucesso
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detalhes?.message || "Erro na comunicação com a API");
+        }
+
+        const result = await response.json();
+        
+        if (result.url) {
+            // 3. ACRESCENTADO: Sucesso - Redireciona para o Checkout Appmax
+            window.location.href = result.url; 
+        } else {
+            throw new Error("URL de checkout não gerada.");
+        }
+
+    } catch (error) {
+        // 4. ACRESCENTADO: Alerta amigável em caso de erro (ex: Erro 403 ou 500)
+        console.error("Erro no Checkout:", error);
+        alert("Ops! Tivemos um problema: " + error.message + "\n\nPor favor, tente novamente em instantes ou chame nosso suporte.");
+    } finally {
+        // 5. ACRESCENTADO: Restaura o botão caso algo falhe
+        btn.innerText = originalText;
+        btn.disabled = false;
     }
 }
         // Banner
