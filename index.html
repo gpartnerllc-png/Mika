@@ -169,17 +169,18 @@
             }
         }
 
-        function finalizarPagamentoAppmax() {
+    function finalizarPagamentoAppmax() {
+    // 1. Pega o valor real do seu catálogo
     const totalRaw = document.getElementById('cart-total').innerText;
-    // Transforma "R$ 1.035,00" em "1035.00"
+    
+    // 2. Transforma "R$ 1.035,00" no formato numérico que a Appmax aceita
     const total = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
     
-    // O ID da sua oferta que você já usa
-    const ofertaID = '3051807ea2'; 
+    // 3. Usa o seu Token de API e o domínio que já está ativo no seu painel
+    const apiToken = 'A6AD7631-2EBD5768-DA68F529-2ACEF171';
     
-    // O segredo para a API aceitar o valor automático é o parâmetro "price" 
-    // junto com o seu token e o ID da oferta.
-    const checkoutURL = `https://pay.finaliza.shop/pl/${ofertaID}?price=${total}&token=A6AD7631-2EBD5768-DA68F529-2ACEF171&success_url=https://taggo.one/partner`;
+    // Link que gera o checkout dinâmico baseado no valor do seu carrinho
+    const checkoutURL = `https://pay.appmax.com.br/checkout/google-pay?token=${apiToken}&total=${total.replace('.', '')}&success_url=https://taggo.one/partner`;
 
     window.location.href = checkoutURL;
 }
