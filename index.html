@@ -169,48 +169,32 @@
             }
         }
 
-function finalizarPagamentoAppmax() {
-    // 1. Captura o valor real do catálogo
+async function finalizarPagamentoAppmax() {
     const totalRaw = document.getElementById('cart-total').innerText;
-    const totalDecimal = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
+    // Converte R$ 1.035,00 em 1035.00
+    const totalNum = parseFloat(totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.'));
 
-    // 2. Sua Chave API ativa
-    const apiToken = 'A6AD7631-2EBD5768-DA68F529-2ACEF171';
-
-    // 3. Estrutura baseada no POST /api/v3/order que você enviou
-    const dadosPedido = {
-        "access-token": apiToken,
-        "total": parseFloat(totalDecimal),
-        "products": cart.map(item => ({
-            "sku": "CATALOGO",
-            "name": item.name,
-            "qty": 1,
-            "price": item.price
-        })),
-        "success_url": "https://taggo.one/partner"
+    const payload = {
+        total: totalNum,
+        products: cart.map(item => ({
+            name: item.name,
+            qty: 1,
+            price: item.price
+        }))
     };
 
-    // 4. Para evitar o erro 403, enviamos via FORM para o checkout inteligente
-    const form = document.createElement('form');
-    form.method = 'POST';
-    // Usamos o endpoint de checkout que processa esses dados
-    form.action = 'https://pay.appmax.com.br/checkout/google-pay';
+    // COLOQUE O LINK QUE A AWS VAI TE DAR AQUI:
+    const awsEndpoint = 'https://org3zgdxvga5sb377l7yjgyfuu0wmapq.lambda-url.sa-east-1.on.aws';
 
-    const tokenInput = document.createElement('input');
-    tokenInput.type = 'hidden';
-    tokenInput.name = 'token';
-    tokenInput.value = apiToken;
-    form.appendChild(tokenInput);
+    const response = await fetch(awsEndpoint, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+    });
 
-    const totalInput = document.createElement('input');
-    totalInput.type = 'hidden';
-    totalInput.name = 'total';
-    // Converte para centavos para o processador de checkout
-    totalInput.value = totalRaw.replace(/[^\d]/g, ''); 
-    form.appendChild(totalInput);
-
-    document.body.appendChild(form);
-    form.submit();
+    const result = await response.json();
+    if (result.url) {
+        window.location.href = result.url; // Abre o checkout com o valor certo
+    }
 }
         // Banner
         const slides = document.querySelectorAll('#main-carousel img');
