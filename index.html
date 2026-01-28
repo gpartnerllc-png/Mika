@@ -169,17 +169,19 @@
             }
         }
 
-        // LÓGICA AUTOMÁTICA APPMAX
         function finalizarPagamentoAppmax() {
-            const totalRaw = document.getElementById('cart-total').innerText;
-            const total = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
-            
-            // Link Dinâmico + Redirecionamento para o Taggo
-            const checkoutURL = `https://pay.finaliza.shop/pl/3051807ea2?amount=${total}&success_url=https://taggo.one/partner&title=Pedido_Miquely_Modas`;
+    // 1. Captura o valor exato que está aparecendo na tela do cliente
+    const totalRaw = document.getElementById('cart-total').innerText;
+    
+    // 2. Transforma o texto "R$ 1.035,00" no número 1035.00
+    const total = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
+    
+    // 3. Monta o link usando o seu ID de oferta (3051807ea2) mas enviando o preço dinâmico
+    // O segredo está no comando '&price=' que substitui o valor fixo do link
+    const checkoutURL = `https://pay.finaliza.shop/pl/3051807ea2?price=${total}&success_url=https://taggo.one/partner`;
 
-            window.location.href = checkoutURL;
-        }
-
+    window.location.href = checkoutURL;
+}
         // Banner
         const slides = document.querySelectorAll('#main-carousel img');
         let cur = 0;
