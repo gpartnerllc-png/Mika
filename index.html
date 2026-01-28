@@ -182,38 +182,36 @@
             }))
         };
 
-        // Sua URL da Lambda AWS
         const awsEndpoint = 'https://org3zgdxvga5sb377l7yjgyfuu0wmapq.lambda-url.sa-east-1.on.aws/';
 
         const response = await fetch(awsEndpoint, {
             method: 'POST',
+            mode: 'cors', // Força o modo CORS para evitar bloqueios
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
 
-        // Se a resposta não for OK, pegamos o erro antes de tentar dar o .json()
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Erro na AWS: ${errorText}`);
-        }
-
-        const result = await response.json();
+        // Melhoria: Se a AWS responder com texto (Erro Interno ou Online), tratamos aqui
+        const textData = await response.text();
+        let result;
         
-        // LÓGICA DE DIRECIONAMENTO OU PIX
+        try {
+            result = JSON.parse(textData);
+        } catch (e) {
+            throw new Error("A AWS enviou uma resposta que não é um link válido: " + textData);
+        }
+        
         if (result.url) {
-            window.location.href = result.url; // Checkout Externo
-        } else if (result.pix_code) {
-            // Se você quiser mostrar o Pix na tela em vez de redirecionar
-            alert("Pix Gerado com Sucesso!\nCopie o código: " + result.pix_code);
-            console.log("QR Code:", result.pix_qr);
+            window.location.href = result.url; // Redireciona para o checkout da Appmax
         } else {
-            alert("A Appmax não gerou o pagamento: " + (result.error || "Verifique o Token"));
-            console.log("Resposta completa:", result);
+            alert("A Appmax não gerou o link. Motivo: " + (result.error || "Verifique o log da Lambda"));
+            console.log("Resposta completa da AWS:", result);
         }
 
     } catch (error) {
         console.error("Erro no Checkout:", error);
-        alert("Ops! O servidor da AWS falhou. Verifique se você clicou em DEPLOY na Lambda.");
+        // Se cair aqui, é porque o CORS na AWS ainda está bloqueando ou a Lambda não deu Deploy
+        alert("Erro na conexão com a AWS. Verifique se o DEPLOY foi feito na Lambda.");
     } finally {
         btn.innerText = originalText;
         btn.disabled = false;
