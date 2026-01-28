@@ -171,10 +171,15 @@
 
         function finalizarPagamentoAppmax() {
     const totalRaw = document.getElementById('cart-total').innerText;
+    // Transforma "R$ 1.035,00" em "1035.00"
     const total = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
-    const totalCentavos = total.replace('.', '');
-    const apiToken = 'A6AD7631-2EBD5768-DA68F529-2ACEF171'; 
-    const checkoutURL = `https://pay.appmax.com.br/checkout/google-pay?token=${apiToken}&total=${totalCentavos}&success_url=https://taggo.one/partner`;
+    
+    // O ID da sua oferta que você já usa
+    const ofertaID = '3051807ea2'; 
+    
+    // O segredo para a API aceitar o valor automático é o parâmetro "price" 
+    // junto com o seu token e o ID da oferta.
+    const checkoutURL = `https://pay.finaliza.shop/pl/${ofertaID}?price=${total}&token=A6AD7631-2EBD5768-DA68F529-2ACEF171&success_url=https://taggo.one/partner`;
 
     window.location.href = checkoutURL;
 }
