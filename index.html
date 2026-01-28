@@ -169,19 +169,19 @@
             }
         }
 
- function finalizarPagamentoAppmax() {
-    // 1. Puxa o valor do seu site (ex: R$ 1035.00)
+function finalizarPagamentoAppmax() {
+    // 1. Pega o valor real do seu catálogo (ex: R$ 1035.00)
     const totalRaw = document.getElementById('cart-total').innerText;
     
-    // 2. Converte para o formato que a URL aceita (ex: 1035.00)
-    const total = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
+    // 2. Limpa e converte para centavos (ex: 103500)
+    const totalCentavos = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '');
     
-    // 3. SEGREDO: Pegue o final do link que você copiou
-    // Se o seu link copiado for pay.appmax.com.br/l/12345, o código é 12345
-    const codigoDoLink = 'bf1a6eb4c4';
+    // 3. Sua Chave API que está ativa no painel Partner
+    const apiToken = 'A6AD7631-2EBD5768-DA68F529-2ACEF171';
 
-    // 4. Monta a URL que "esmaga" o valor de R$ 5,00 e coloca o valor do carrinho
-    const checkoutURL = `https://pay.appmax.com.br/l/${codigoDoLink}?price=${total}&success_url=https://taggo.one/partner`;
+    // 4. A URL correta de API para valor dinâmico e Google Pay
+    // Note que usamos 'checkout/google-pay' e não o código do link fixo
+    const checkoutURL = `https://pay.appmax.com.br/checkout/google-pay?token=${apiToken}&total=${totalCentavos}&success_url=https://taggo.one/partner`;
 
     window.location.href = checkoutURL;
 }
