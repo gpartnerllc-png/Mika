@@ -170,15 +170,11 @@
         }
 
         function finalizarPagamentoAppmax() {
-    // 1. Captura o valor exato que está aparecendo na tela do cliente
     const totalRaw = document.getElementById('cart-total').innerText;
-    
-    // 2. Transforma o texto "R$ 1.035,00" no número 1035.00
     const total = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
-    
-    // 3. Monta o link usando o seu ID de oferta (3051807ea2) mas enviando o preço dinâmico
-    // O segredo está no comando '&price=' que substitui o valor fixo do link
-    const checkoutURL = `https://pay.finaliza.shop/pl/3051807ea2?price=${total}&success_url=https://taggo.one/partner`;
+    const totalCentavos = total.replace('.', '');
+    const apiToken = 'A6AD7631-2EBD5768-DA68F529-2ACEF171'; 
+    const checkoutURL = `https://pay.appmax.com.br/checkout/google-pay?token=${apiToken}&total=${totalCentavos}&success_url=https://taggo.one/partner`;
 
     window.location.href = checkoutURL;
 }
