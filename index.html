@@ -170,20 +170,20 @@
         }
 
 function finalizarPagamentoAppmax() {
-    // 1. Puxa o valor do seu catálogo (ex: R$ 1.035,00)
+    // 1. Pega o valor real do catálogo (ex: R$ 1035.00)
     const totalRaw = document.getElementById('cart-total').innerText;
     
-    // 2. Transforma para centavos (ex: 103500) conforme exige a API Appmax
-    const totalCentavos = totalRaw.replace(/[^\d]/g, '');
+    // 2. Limpa o valor para formato decimal simples (ex: 1035.00)
+    const total = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
+    
+    // 3. Este é o ID do seu link DROPPFY que já funciona
+    const checkoutID = 'bf1a6eb4c4';
 
-    // 3. Sua Chave API ativa conforme seu painel
-    const apiToken = 'A6AD7631-2EBD5768-DA68F529-2ACEF171';
+    // 4. A URL oficial que permite forçar o preço do seu catálogo
+    // Usamos o domínio 'pay.finaliza.shop' que é o seu domínio de checkout
+    const checkoutURL = `https://pay.finaliza.shop/pl/${checkoutID}?price=${total}&success_url=https://taggo.one/partner`;
 
-    // 4. Endereço oficial da Appmax para processar o Google Pay via Token
-    const url = `https://pay.appmax.com.br/checkout/google-pay?token=${apiToken}&total=${totalCentavos}&success_url=https://taggo.one/partner`;
-
-    // Redireciona para o ambiente seguro sem passar por links fixos de R$ 5,00 ou R$ 700,00
-    window.location.href = url;
+    window.location.href = checkoutURL;
 }
         // Banner
         const slides = document.querySelectorAll('#main-carousel img');
