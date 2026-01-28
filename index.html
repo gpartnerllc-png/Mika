@@ -167,7 +167,16 @@
             }
         }
 
-        function checkoutInfinitePay() { window.location.href = "https://pay.infinitepay.io/miquelymodas"; }
+       <div class="p-6 border-t bg-gray-50 text-center">
+    <button onclick="finalizarPagamentoAppmax()" 
+        class="w-full bg-blue-700 text-white py-4 rounded-lg font-bold uppercase text-[12px] shadow-xl hover:bg-blue-800 transition-all">
+        Pagar com Google Pay / Pix / Cartão
+    </button>
+    <p class="text-[10px] mt-4 text-gray-500">
+        Pagamento 100% Automático via <strong>Appmax API</strong>. <br>
+        Após o pagamento, você será redirecionado para nosso cartão de visitas.
+    </p>
+</div>
 
         // Banner
         const slides = document.querySelectorAll('#main-carousel img');
