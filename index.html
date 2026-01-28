@@ -6,7 +6,6 @@
     <title>Atacado | Use Intuição Lingerie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-     <link href="libs/api-whatsapp/whatsapp.css?224337" rel="stylesheet" type="text/css">
     <link rel="icon" type="image/jpeg" href="https://novidadesnaloja.moda/clientes/47149826000180_20240122230901.jpeg" />
 
     <style>
@@ -34,7 +33,7 @@
                 Miquely<span class="font-light text-pink-600">Modas</span>
             </div>
             
-                <div class="absolute inset-0 bg-black/12 flex flex-col justify-center items-center text-white p-2 text-center z-7">
+                <div class="absolute inset-0 bg-black/12 flex flex-col justify-center items-center text-black p-2 text-center z-7">
             <h1 class="text-2x0 md:text-3x1 font-bold mb-3 uppercase tracking-tighter">Nova Coleção</h1>
             <p class="text-sm uppercase tracking-widest font-light bg-black/40 px-4 py-1">Atacado Premium Miquely Modas</p>
         </div>
@@ -48,13 +47,21 @@
         </div>
     </header>
 
-    <section class="relative h-[55vh] md:h-[75vh] bg-gray-200 overflow-hidden" id="main-carousel">
-        <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1765913728_bannerPrincipal2.jpg" class="active">
-        <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1762972131_bannerPrincipal2.jpg">
-        
-    </section>
+       <nav class="hidden md:flex gap-8 font-semibold text-[11px] uppercase tracking-widest text-gray-600">
+    <a href="https://api.whatsapp.com/send/?phone=5561983446343&text&type=phone_number&app_absent=0" target="_blank" class="hover:text-pink-600">Contato</a>
+</nav>
 
-    <div class="promo-bar font-bold" id="top-bar">ATACADO - Pedido Mínimo: R$ 200,00</div>
+<section class="relative h-[55vh] md:h-[75vh] bg-gray-200 overflow-hidden" id="main-carousel">
+    <a href="https://api.whatsapp.com/send/?phone=5561983446343&text&type=phone_number&app_absent=0" target="_blank">
+        <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1765913728_bannerPrincipal2.jpg" class="active">
+    </a>
+
+    <a href="https://api.whatsapp.com/send/?phone=5561983446343&text&type=phone_number&app_absent=0" target="_blank">
+        <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1762972131_bannerPrincipal2.jpg">
+    </a>
+</section>
+
+    <div class="promo-bar font-bold" id="top-bar">ATACADO - Pedido Mínimo: R$ 712,12</div>
 
     <main class="container mx-auto px-4 py-12">
         <h3 class="text-center text-xl font-bold mb-10 uppercase tracking-[0.3em] text-gray-800">Catálogo Disponível</h3>
@@ -136,7 +143,7 @@
                 <span id="cart-total" class="text-black">R$ 0,00</span>
             </div>
             <div id="min-order-msg" class="bg-gray-100 p-3 text-center mb-4 min-order-alert text-red-600">
-                Faltam R$ 200,00 para o mínimo
+                Faltam R$ 712,12 para o mínimo
             </div>
             <div class="flex flex-col gap-2">
                 <button id="btn-checkout-yampi" disabled onclick="checkoutYampi()" class="w-full bg-gray-300 text-white py-4 font-bold uppercase text-xs tracking-widest cursor-not-allowed">Finalizar via Yampi</button>
@@ -155,9 +162,21 @@
             bannerSlides[currentSlide].classList.add('active');
         }, 4500);
 
+        <script>
+    // --- CONFIGURAÇÃO DE MARGEM DE LUCRO (USO INTERNO) ---
+    // Mude o valor de MARGEM_LUCRO para aumentar os preços. 
+    // Exemplo: 1.20 aumenta 20% | 0.90 reduz 10% | 1.00 mantém o preço original.
+    const MARGEM_LUCRO = 1.00; 
+
+    // O código que você enviou pode ficar guardado aqui em comentário para referência:
+    /* <div><input type="text" id="cli_percentualconsultoramoda" placeholder="0,00 %"></div> 
+    */
+
+    // Logica do Carrossel de Fachada... (continua o código original)
+
         // Carrinho
         let cart = [];
-        const MIN_ORDER = 200;
+        const MIN_ORDER = 700;
 
         function toggleCart() {
             document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
@@ -221,11 +240,12 @@
         function checkoutInfinitePay() { window.location.href = "https://pay.infinitepay.io/miquelymodas"; }
     </script>
     
-    <div class="fixed bottom-6 left-6 z-[100] pointer-events-none">
-    <div class="animate-float">
+    <div class="fixed bottom-6 left-6 z-[100] pointer-events-auto">
+    <a href="https://api.whatsapp.com/send/?phone=5561983446343&text&type=phone_number&app_absent=0" target="_blank" class="block animate-float">
         <img src="https://novidadesnaloja.moda/clientes/47149826000180_20240122230901.jpeg" 
-             class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-pink-500 shadow-lg animate-pulse-glow object-cover">
-    </div>
+             class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-pink-500 shadow-lg animate-pulse-glow object-cover"
+             alt="Chamar no WhatsApp">
+    </a>
 </div>
 
 <style>
