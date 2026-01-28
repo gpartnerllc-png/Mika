@@ -194,24 +194,20 @@ async function finalizarPagamentoAppmax() {
         const awsEndpoint = 'https://org3zgdxvga5sb377l7yjgyfuu0wmapq.lambda-url.sa-east-1.on.aws';
 
         const response = await fetch(awsEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
 
-        // 2. ACRESCENTADO: Verificação se a AWS respondeu com sucesso
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.detalhes?.message || "Erro na comunicação com a API");
-        }
-
-        const result = await response.json();
-        
-        if (result.url) {
-            // 3. ACRESCENTADO: Sucesso - Redireciona para o Checkout Appmax
-            window.location.href = result.url; 
+    const result = await response.json(); // Se a Lambda estiver certa, isso não falha mais
+    
+    if (result.url) {
+        window.location.href = result.url; // Redirecionamento bem-sucedido
+    } else {
+        alert("A Appmax recusou o pedido. Verifique se o Token está ativo.");
+        console.log(result);
+    }
+   
         } else {
             throw new Error("URL de checkout não gerada.");
         }
