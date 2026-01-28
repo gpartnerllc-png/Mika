@@ -169,18 +169,19 @@
             }
         }
 
-    function finalizarPagamentoAppmax() {
-    // 1. Pega o valor real do seu catálogo
+   function finalizarPagamentoAppmax() {
+    // 1. Captura o valor exato que o cliente montou no carrinho
     const totalRaw = document.getElementById('cart-total').innerText;
     
-    // 2. Transforma "R$ 1.035,00" no formato numérico que a Appmax aceita
-    const total = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
+    // 2. Limpa o valor para o formato que a Appmax entende (ex: 103500 para R$ 1.035,00)
+    const totalCentavos = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '');
     
-    // 3. Usa o seu Token de API e o domínio que já está ativo no seu painel
+    // 3. Sua Chave API que você enviou
     const apiToken = 'A6AD7631-2EBD5768-DA68F529-2ACEF171';
     
-    // Link que gera o checkout dinâmico baseado no valor do seu carrinho
-    const checkoutURL = `https://pay.appmax.com.br/checkout/google-pay?token=${apiToken}&total=${total.replace('.', '')}&success_url=https://taggo.one/partner`;
+    // 4. Link de Checkout Direto via API (Isso evita o erro de carrinho vazio e preço fixo)
+    // O parâmetro 'total' define o preço dinamicamente
+    const checkoutURL = `https://pay.appmax.com.br/checkout/google-pay?token=${apiToken}&total=${totalCentavos}&success_url=https://taggo.one/partner&title=Pedido_Miquely_Modas`;
 
     window.location.href = checkoutURL;
 }
