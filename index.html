@@ -188,6 +188,9 @@ async function finalizarPagamentoAppmax() {
 
     const response = await fetch(awsEndpoint, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json' // ESSENCIAL para a AWS aceitar o comando
+        },
         body: JSON.stringify(payload)
     });
 
