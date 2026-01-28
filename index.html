@@ -33,12 +33,9 @@
             <div class="text-2xl font-bold tracking-tighter text-black uppercase">
                 Miquely<span class="font-light text-pink-600">Modas</span>
             </div>
-                                                                                              
-                                                                                             <nav class="hidden md:flex gap-8 font-semibold text-[11px] uppercase tracking-widest text-gray-600">
-                                                                                                                                  <a href="#" class="hover:text-pink-600">Contato</a>
-                
-                <div class="absolute inset-0 bg-black/10 flex flex-col justify-center items-center text-white p-2 text-center z-5">
-            <h1 class="text-1x0 md:text-3x2 font-bold mb-2 uppercase tracking-tighter">Nova Coleção</h1>
+            
+                <div class="absolute inset-0 bg-black/12 flex flex-col justify-center items-center text-white p-2 text-center z-7">
+            <h1 class="text-2x0 md:text-3x1 font-bold mb-3 uppercase tracking-tighter">Nova Coleção</h1>
             <p class="text-sm uppercase tracking-widest font-light bg-black/40 px-4 py-1">Atacado Premium Miquely Modas</p>
         </div>
             </nav>
@@ -223,5 +220,36 @@
         function checkoutYampi() { window.location.href = "https://seu-checkout.yampi.com.br/finalizar"; }
         function checkoutInfinitePay() { window.location.href = "https://pay.infinitepay.io/miquelymodas"; }
     </script>
+    
+    <div class="fixed bottom-6 left-6 z-[100] pointer-events-none">
+    <div class="animate-float">
+        <img src="https://novidadesnaloja.moda/clientes/47149826000180_20240122230901.jpeg" 
+             class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-pink-500 shadow-lg animate-pulse-glow object-cover">
+    </div>
+</div>
+
+<style>
+    /* Animação de Flutuar (Sobe e desce suave) */
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Animação de Piscar/Brilhar (Glow effect) */
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 5px rgba(219, 39, 119, 0.4); opacity: 1; }
+        50% { box-shadow: 0 0 25px rgba(219, 39, 119, 0.8); opacity: 0.8; }
+    }
+    .animate-pulse-glow {
+        animation: pulse-glow 2s infinite;
+    }
+</style>
+
+     <nav class="hidden md:flex gap-8 font-semibold text-[11px] uppercase tracking-widest text-gray-600">
+        <a href="#" class="hover:text-pink-600">Contato</a>
+         
 </body>
 </html>
