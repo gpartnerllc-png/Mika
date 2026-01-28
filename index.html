@@ -109,6 +109,8 @@ extraProducts.forEach((prod, i) => {
     // Cálculo individual com base no preço de cada peça
     const precoFinalNum = prod.preco * MARGEM_LUCRO;
     const precoExibicao = precoFinalNum.toFixed(2).replace('.', ',');
+    const list = document.getElementById('product-list');
+                extraImages.forEach((url, i) => {
                     list.innerHTML += `
                     <div class="product-card group">
                         <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
