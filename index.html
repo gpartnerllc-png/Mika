@@ -172,18 +172,42 @@
 function finalizarPagamentoAppmax() {
     // 1. Pega o valor real do seu catálogo (ex: R$ 1035.00)
     const totalRaw = document.getElementById('cart-total').innerText;
-    
-    // 2. Limpa e converte para centavos (ex: 103500)
     const totalCentavos = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '');
     
-    // 3. Sua Chave API que está ativa no painel Partner
+    // 2. Sua Chave API ativa
     const apiToken = 'A6AD7631-2EBD5768-DA68F529-2ACEF171';
 
-    // 4. A URL correta de API para valor dinâmico e Google Pay
-    // Note que usamos 'checkout/google-pay' e não o código do link fixo
-    const checkoutURL = `https://pay.appmax.com.br/checkout/google-pay?token=${apiToken}&total=${totalCentavos}&success_url=https://taggo.one/partner`;
+    // 3. Monta o objeto de venda para o Checkout Transparente (Google Pay nativo)
+    const dadosVenda = {
+        "access_token": apiToken,
+        "cart": [{
+            "product_id": "1", // Use um ID genérico
+            "product_title": "Pedido Catálogo",
+            "unit_price": totalCentavos,
+            "quantity": 1
+        }],
+        "customer": {
+            // Opcional: pode pedir os dados antes ou deixar o Google Pay preencher
+        },
+        "success_url": "https://taggo.one/partner"
+    };
 
-    window.location.href = checkoutURL;
+    // 4. Redireciona para o processador de pagamento dinâmico
+    // Isso evita o erro 403 pois envia os dados via POST (Seguro)
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://pay.appmax.com.br/api/v3/checkout';
+
+    for (const key in dadosVenda) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = typeof dadosVenda[key] === 'object' ? JSON.stringify(dadosVenda[key]) : dadosVenda[key];
+        form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
 }
         // Banner
         const slides = document.querySelectorAll('#main-carousel img');
