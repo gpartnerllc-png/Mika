@@ -170,20 +170,47 @@
         }
 
 function finalizarPagamentoAppmax() {
-    // 1. Pega o valor real do catálogo (ex: R$ 1035.00)
+    // 1. Captura o valor real do catálogo
     const totalRaw = document.getElementById('cart-total').innerText;
-    
-    // 2. Limpa o valor para formato decimal simples (ex: 1035.00)
-    const total = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
-    
-    // 3. Este é o ID do seu link DROPPFY que já funciona
-    const checkoutID = 'bf1a6eb4c4';
+    const totalDecimal = totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.');
 
-    // 4. A URL oficial que permite forçar o preço do seu catálogo
-    // Usamos o domínio 'pay.finaliza.shop' que é o seu domínio de checkout
-    const checkoutURL = `https://pay.finaliza.shop/pl/${checkoutID}?price=${total}&success_url=https://taggo.one/partner`;
+    // 2. Sua Chave API ativa
+    const apiToken = 'A6AD7631-2EBD5768-DA68F529-2ACEF171';
 
-    window.location.href = checkoutURL;
+    // 3. Estrutura baseada no POST /api/v3/order que você enviou
+    const dadosPedido = {
+        "access-token": apiToken,
+        "total": parseFloat(totalDecimal),
+        "products": cart.map(item => ({
+            "sku": "CATALOGO",
+            "name": item.name,
+            "qty": 1,
+            "price": item.price
+        })),
+        "success_url": "https://taggo.one/partner"
+    };
+
+    // 4. Para evitar o erro 403, enviamos via FORM para o checkout inteligente
+    const form = document.createElement('form');
+    form.method = 'POST';
+    // Usamos o endpoint de checkout que processa esses dados
+    form.action = 'https://pay.appmax.com.br/checkout/google-pay';
+
+    const tokenInput = document.createElement('input');
+    tokenInput.type = 'hidden';
+    tokenInput.name = 'token';
+    tokenInput.value = apiToken;
+    form.appendChild(tokenInput);
+
+    const totalInput = document.createElement('input');
+    totalInput.type = 'hidden';
+    totalInput.name = 'total';
+    // Converte para centavos para o processador de checkout
+    totalInput.value = totalRaw.replace(/[^\d]/g, ''); 
+    form.appendChild(totalInput);
+
+    document.body.appendChild(form);
+    form.submit();
 }
         // Banner
         const slides = document.querySelectorAll('#main-carousel img');
