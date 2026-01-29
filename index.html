@@ -177,16 +177,14 @@
         const totalRaw = document.getElementById('cart-total').innerText;
         const totalNum = parseFloat(totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.'));
 
-    
-        const payload = {
-            products: cart.map(item => ({
-                product_id: 1,           // Appmax exige 'product_id'
-                product_name: item.name, // Appmax exige 'product_name'
-                product_qty: 1,          // Appmax exige 'product_qty'
-                product_price: item.price // Appmax exige 'product_price'
-            }))
-        };
-
+         const payload = {
+        total: totalNum,
+        products: cart.map(item => ({
+            name: item.name,
+            qty: 1,
+            price: item.price
+        }))
+    };
         const awsEndpoint = 'https://org3zgdxvga5sb377l7yjgyfuu0wmapq.lambda-url.sa-east-1.on.aws/';
 
         const response = await fetch(awsEndpoint, {
