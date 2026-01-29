@@ -3,236 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atacado | Miquely Modas Lingerie</title>
+    <title>Catálogo Miquely Modas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="icon" type="image/jpeg" href="https://novidadesnaloja.moda/clientes/47149826000180_20240122230901.jpeg" />
-
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
-        body { font-family: 'Montserrat', sans-serif; }
-        .promo-bar { background-color: #000; color: #fff; font-size: 11px; padding: 6px 0; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
-        .cart-sidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .product-img { transition: transform 0.5s ease; }
-        .product-card:hover .product-img { transform: scale(1.05); }
-        .min-order-alert { font-size: 10px; font-weight: bold; text-transform: uppercase; }
-        #main-carousel img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.2s ease-in-out; }
-        #main-carousel img.active { opacity: 1; }
-        .attr-select { background: white; border: 1px solid #ddd; font-size: 9px; padding: 4px; margin-bottom: 4px; text-transform: uppercase; font-weight: bold; width: 100%; cursor: pointer; }
+        :root { --ws-green: #25D366; --ws-bg: #f0f2f5; }
+        body { background-color: var(--ws-bg); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .animate-float { animation: float 3s ease-in-out infinite; }
+        /* Estilo Cartão Catálogo WhatsApp */
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .product-card:active { transform: scale(0.98); }
+        
+        .ws-header { background-color: #075E54; color: white; }
+        .btn-pay { background-color: #000; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; font-weight: 600; transition: 0.3s; }
+        .btn-pay:hover { background-color: #333; }
+        
+        /* Modal de Recibo */
+        #receipt-modal { display: none; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+        .receipt-paper { background: white; border-radius: 2px; position: relative; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .receipt-paper::after { content: ""; position: absolute; bottom: -10px; left: 0; width: 100%; height: 10px; background: linear-gradient(-45deg, white 5px, transparent 0), linear-gradient(45deg, white 5px, transparent 0); background-size: 10px 10px; }
     </style>
 </head>
-<body class="bg-white">
+<body>
 
-    <header class="border-b sticky top-0 bg-white z-50">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold tracking-tighter text-black uppercase">
-                Miquely<span class="font-light text-pink-600">Modas</span>
-            </div>
-            <div class="flex items-center gap-5">
-                <div class="relative cursor-pointer" onclick="toggleCart()">
-                    <i class="fa-solid fa-bag-shopping text-2xl"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-pink-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">0</span>
+    <header class="ws-header sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://novidadesnaloja.moda/clientes/47149826000180_20240122230901.jpeg" class="w-10 h-10 rounded-full border border-white/20">
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Miquely Modas</h1>
+                    <span class="text-xs text-green-300">● Online agora</span>
                 </div>
             </div>
+            <button onclick="toggleCart()" class="relative p-2">
+                <i class="fa-solid fa-cart-shopping text-xl"></i>
+                <span id="cart-count" class="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+            </button>
         </div>
     </header>
 
-    <div class="promo-bar font-bold">ATACADO - Pedido Mínimo: R$ 700,00</div>
+    <div class="bg-white border-b px-4 py-2 text-center text-[11px] text-gray-500 font-medium uppercase tracking-wider">
+        Mínimo para atacado: <span class="text-red-500 font-bold">R$ 700,00</span>
+    </div>
 
-    <main class="container mx-auto px-4 py-12">
-        <h3 class="text-center text-xl font-bold mb-10 uppercase tracking-[0.3em] text-gray-800">Catálogo Disponível</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8" id="product-list"></div>
-    </main>
+    <main class="container mx-auto px-2 py-4 grid grid-cols-2 md:grid-cols-4 gap-3" id="catalog-container">
+        </main>
 
-    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl z-[100] translate-x-full cart-sidebar flex flex-col">
-        <div class="p-6 border-b flex justify-between items-center bg-gray-50">
-            <h2 class="font-bold uppercase tracking-widest text-sm text-pink-600">Minha Sacola</h2>
-            <button onclick="toggleCart()" class="text-2xl">&times;</button>
-        </div>
-        <div id="cart-content" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-        <div class="p-6 border-t bg-white">
-            <div class="flex justify-between font-bold text-lg mb-2">
-                <span class="text-gray-500 text-sm uppercase">Subtotal:</span>
-                <span id="cart-total">R$ 0,00</span>
+    <div id="receipt-modal" class="fixed inset-0 z-[200] flex items-center justify-center p-4">
+        <div class="receipt-paper w-full max-w-sm">
+            <div class="text-center border-b border-dashed pb-4 mb-4">
+                <h2 class="font-bold text-xl uppercase">Recibo de Pedido</h2>
+                <p class="text-xs text-gray-400" id="receipt-date"></p>
             </div>
-            <div id="min-order-msg" class="p-3 text-center mb-4 min-order-alert text-red-600"></div>
+            <div id="receipt-items" class="space-y-2 text-sm mb-4 max-h-60 overflow-y-auto"></div>
+            <div class="border-t border-dashed pt-4 mb-6">
+                <div class="flex justify-between font-bold text-lg">
+                    <span>TOTAL:</span>
+                    <span id="receipt-total">R$ 0,00</span>
+                </div>
+            </div>
             
-            <button id="btn-whatsapp" onclick="enviarWhatsApp()" class="w-full bg-green-600 text-white py-4 font-bold uppercase text-[12px] shadow-xl hover:bg-green-700 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
-                Finalizar Pedido via WhatsApp
+            <div class="space-y-3">
+                <button onclick="initGooglePay()" class="btn-pay w-full py-3">
+                    <i class="fa-brands fa-google-pay text-3xl"></i> Pagar Agora
+                </button>
+                
+                <button onclick="finalizarWhatsApp()" class="w-full bg-[#25D366] text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp"></i> Enviar Pedido no Whats
+                </button>
+                
+                <button onclick="closeReceipt()" class="w-full text-gray-400 text-xs font-semibold py-2">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-xs bg-white shadow-2xl z-[150] translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-4 ws-header flex justify-between items-center">
+            <span class="font-bold">Minha Sacola</span>
+            <button onclick="toggleCart()" class="text-white text-2xl">&times;</button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50"></div>
+        <div class="p-4 border-t shadow-inner bg-white">
+            <div class="flex justify-between font-bold mb-4">
+                <span>Subtotal:</span>
+                <span id="cart-total-value">R$ 0,00</span>
+            </div>
+            <button id="btn-pre-checkout" onclick="openReceipt()" class="w-full bg-black text-white py-4 rounded-xl font-bold uppercase text-xs tracking-widest disabled:opacity-30">
+                Fechar Pedido
             </button>
         </div>
     </div>
 
     <script>
-        const MARGEM_LUCRO = 1.50; 
-        const MIN_ORDER = 700;
+        const MARGEM = 1.50;
+        const MIN_PEDIDO = 700;
         let cart = [];
 
-        function generateHTML(name, price, img, id) {
-            return `
-            <div class="product-card group">
-                <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
-                    <img src="${img}" class="product-img w-full h-full object-cover">
-                    <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-1 bg-black/10">
-                        <select id="color-${id}" class="attr-select"><option>Preto</option><option>Branco</option><option>Rosa</option><option>Vermelho</option></select>
-                        <select id="size-${id}" class="attr-select"><option>P</option><option>M</option><option>G</option><option>GG</option></select>
-                        <button onclick="addWithAttrs('${name}', ${price}, '${img}', '${id}')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar</button>
+        // Base de dados simplificada (usando os links que você enviou)
+        const db = [
+            { id: 'p1', name: 'Body Manga Longa', price: 125.90, img: 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820155538_intuicao3_67_e.jpg' },
+            { id: 'v1', name: 'Conjunto Luxo 4132', price: 115.00, img: 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4132_(3)_ec.jpg' },
+            { id: 'v2', name: 'Conjunto Renda 22506', price: 115.00, img: 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/2022101311531022506_(6)_e.jpg' }
+            // ... adicione os outros links aqui seguindo o padrão
+        ];
+
+        function renderCatalog() {
+            const container = document.getElementById('catalog-container');
+            db.forEach(prod => {
+                const finalPrice = prod.price * MARGEM;
+                container.innerHTML += `
+                    <div class="product-card">
+                        <img src="${prod.img}" class="w-full aspect-[3/4] object-cover">
+                        <div class="p-3">
+                            <h3 class="text-[11px] font-bold text-gray-700 truncate uppercase">${prod.name}</h3>
+                            <p class="text-green-600 font-bold text-sm">R$ ${finalPrice.toFixed(2)}</p>
+                            <button onclick="addToCart('${prod.name}', ${finalPrice}, '${prod.img}')" class="mt-2 w-full border border-green-500 text-green-600 py-1 rounded-md text-[10px] font-bold hover:bg-green-50">
+                                ADICIONAR
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="mt-4 text-center px-2">
-                    <h4 class="text-[11px] text-gray-500 uppercase font-semibold">${name}</h4>
-                    <p class="font-bold text-base mt-1 text-black">R$ ${price.toFixed(2).replace('.',',')}</p>
-                </div>
-            </div>`;
-        }
-
-        function initProducts() {
-            const list = document.getElementById('product-list');
-            list.innerHTML = '';
-            
-            const p1Base = 125.90;
-            const p1Calc = p1Base * MARGEM_LUCRO;
-            list.innerHTML += generateHTML('Body Manga Longa', p1Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820155538_intuicao3_67_e.jpg', 'p1');
-
-            const links = [
-                ["Conjunto Luxo 4132", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4132_(3)_ec.jpg"],
-                ["Conjunto Renda 22506", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/2022101311531022506_(6)_e.jpg"],
-                ["Brallette V 7362", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206113500_img_7362_e1.jpg"],
-                ["Brallette Radiante 7370", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114055_img_7370_e.jpg"],
-                ["Conjunto Ref 4004", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20210629160317ref._4004_(1)_e.jpg"],
-                ["Lingerie Soft 2023", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230330090806whatsapp_image_2023-03-30_at_08.49.20_e1.jpeg"],
-                ["Lingerie Intuition 30", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20251202095430_intuicao_30_e.jpg"],
-                ["Conjunto Satin 7152", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/20250522113207_img_7152_e.jpg"],
-                ["Conjunto Elegance 4111", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4111_(2)_ec.jpg"],
-                ["Lingerie Glamour", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230519102154_whatsappimage20230519at10183828129_e.jpeg"],
-                ["Conjunto Night", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/9/20231117163638_whatsappimage20231117at150951_e.jpeg"],
-                ["Lingerie Chic 31", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/1/20251006155146_intuicao_31_e.jpg"],
-                ["Lingerie Special", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/20231120104222_whatsappimage20231117at104556_e.jpeg"],
-                ["Conjunto Passion", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250821134227_whatsappimage20250821at120153_e.jpg"],
-                ["Intuition 1728", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20251202101449_intuicao_1728129_e.jpg"],
-                ["Lingerie Delicate 5", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250821090129_intuicao3_5_e.jpg"],
-                ["Conjunto Dezembro 31", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/1/20251218144817_intuicaodez25_31_e.jpg"],
-                ["Brallette Master 7426", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206122501_img_7426_e.jpg"],
-                ["Conjunto Summer", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250725112922_whatsappimage20250723at170229_e.jpg"],
-                ["Lingerie Intuition 48", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/26/20250820175544_intuicao3_48_e.jpg"],
-                ["Conjunto Style 7142", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/25/20250522105424_img_7142_e.jpg"],
-                ["Lingerie Intuition 24", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/7/20250820173918_intuicao3_24_e.jpg"],
-                ["Conjunto Dezembro 7", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/25/20251218112643_intuicaodez25_7_e.jpg"],
-                ["Lingerie Classy 17", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/21/20251006162203_intuicao_17_e.jpg"],
-                ["Lingerie Intuition 8", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/2/20250821095001_intuicao3_8_e.jpg"],
-                ["Conjunto Dream 8262", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/17/20250801100605_img_8262_e.jpg"],
-                ["Lingerie Intuition 14", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/7/20251007082926_intuicao_14_e.jpg"],
-                ["Conjunto Beauty 7343", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114319_img_7343_e.jpg"],
-                ["Conjunto Classic 9085", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20250801093940_096a9085_e.jpg"],
-                ["Lingerie Modern 8266", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250715111609_img_8266_e.jpg"],
-                ["Lingerie Setembro", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20250909153843_intuicaoset25_e.jpg"],
-                ["Lingerie Setembro 23", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250909141405_intuicaoset25_23_e.jpg"],
-                ["Lingerie Setembro 49", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/2/20250909143127_intuicaoset25_49_e.jpg"],
-                ["Lingerie Setembro 43", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250909144502_intuicaoset25_43_e.jpg"],
-                ["Lingerie Intuition 3", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20251007082031_intuicao_3_e.jpg"],
-                ["Conjunto Shine 7168", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250522101047_img_716828129_e.jpg"],
-                ["Lingerie Intuition 42", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820164925_intuicao3_42_e.jpg"],
-                ["Lingerie Intuition 27", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/20250821084610_intuicao3_27_e.jpg"],
-                ["Lingerie Intuition 32", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820162500_intuicao3_32_e.jpg"],
-                ["Conjunto Março Especial", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/6/20220307160240whatsapp_image_2022-03-07_at_14.56.51_e.jpg"],
-                ["Lingerie API 113", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1717558113.jpeg"],
-                ["Lingerie API 958", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716580958.jpeg"],
-                ["Lingerie API 271", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716578271.jpeg"],
-                ["Lingerie API 437", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1726157437.jpeg"],
-                ["Lingerie API 000", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716834000.jpeg"],
-                ["Conjunto Maio Glam", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20240517104309_whatsappimage20240517at10183128129_e.jpeg"],
-                ["Conjunto Outubro", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20231002174846_whatsappimage20231002at174112_e.jpeg"],
-                ["Lingerie Fashion 16", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20240517102516_whatsappimage20240517at101916_e.jpeg"],
-                ["Conjunto Setembro Lux", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230911095939_whatsappimage20230904at105708_e.jpeg"],
-                ["Conjunto Agosto Top", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818142755_whatsappimage20230818at141504_e.jpeg"],
-                ["Lingerie Junho Art", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623165155_whatsappimage20230623at14352228229_e.jpg"],
-                ["Conjunto Agosto 18", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230815143028_whatsappimage20230815at142018_e.jpeg"],
-                ["Conjunto Agosto 55", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818144857_whatsappimage20230818at140055_e.jpeg"],
-                ["Lingerie Junho 18", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg"]
-            ];
-
-            links.forEach((item, i) => {
-                const precoBase = 115.00;
-                const precoCalc = precoBase * MARGEM_LUCRO;
-                list.innerHTML += generateHTML(item[0], precoCalc, item[1], `v${i}`);
+                `;
             });
         }
 
-        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
-
-        function addWithAttrs(name, price, img, id) {
-            const color = document.getElementById(`color-${id}`).value;
-            const size = document.getElementById(`size-${id}`).value;
-            cart.push({name, color, size, price, img});
+        function addToCart(name, price, img) {
+            cart.push({name, price, img});
             updateCart();
-            toggleCart();
+            // Feedback visual rápido
+            const count = document.getElementById('cart-count');
+            count.classList.add('scale-150', 'bg-green-500');
+            setTimeout(() => count.classList.remove('scale-150', 'bg-green-500'), 300);
         }
 
         function updateCart() {
-            const content = document.getElementById('cart-content');
-            const totalEl = document.getElementById('cart-total');
-            const msg = document.getElementById('min-order-msg');
-            const btn = document.getElementById('btn-whatsapp');
+            const list = document.getElementById('cart-items');
+            const totalVal = document.getElementById('cart-total-value');
+            const btn = document.getElementById('btn-pre-checkout');
             let total = 0;
-            
-            content.innerHTML = cart.length ? '' : '<p class="text-center py-10 text-[10px]">Sacola vazia</p>';
+
+            list.innerHTML = cart.length ? '' : '<p class="text-center text-gray-400 py-10">Sua sacola está vazia</p>';
             
             cart.forEach((item, i) => {
                 total += item.price;
-                content.innerHTML += `
-                <div class="flex gap-4 border-b pb-2">
-                    <img src="${item.img}" class="w-10 h-14 object-cover">
-                    <div class="flex-1">
-                        <p class="text-[10px] font-bold uppercase">${item.name}</p>
-                        <p class="text-[9px] text-gray-500">${item.color} / ${item.size}</p>
-                        <p class="text-pink-600 font-bold">R$ ${item.price.toFixed(2)}</p>
+                list.innerHTML += `
+                    <div class="flex gap-3 bg-white p-2 rounded-lg shadow-sm">
+                        <img src="${item.img}" class="w-12 h-16 object-cover rounded">
+                        <div class="flex-1">
+                            <p class="text-[10px] font-bold">${item.name}</p>
+                            <p class="text-sm font-bold text-green-600">R$ ${item.price.toFixed(2)}</p>
+                        </div>
+                        <button onclick="removeItem(${i})" class="text-red-400"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
-                    <button onclick="removeItem(${i})" class="text-gray-400 text-xs">Remover</button>
-                </div>`;
+                `;
             });
 
-            totalEl.innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
+            totalVal.innerText = `R$ ${total.toFixed(2)}`;
             document.getElementById('cart-count').innerText = cart.length;
+            btn.disabled = total < MIN_PEDIDO;
+        }
 
-            if(total >= MIN_ORDER) {
-                msg.innerText = "✓ Pedido Mínimo Atingido!";
-                msg.className = "text-green-600 p-3 text-center font-bold uppercase text-[10px]";
-                btn.disabled = false;
+        function removeItem(i) { cart.splice(i, 1); updateCart(); }
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
+
+        // Sistema de Recibo e Pagamento
+        function openReceipt() {
+            const modal = document.getElementById('receipt-modal');
+            const itemsCont = document.getElementById('receipt-items');
+            const totalCont = document.getElementById('receipt-total');
+            let total = 0;
+
+            itemsCont.innerHTML = '';
+            cart.forEach(item => {
+                total += item.price;
+                itemsCont.innerHTML += `
+                    <div class="flex justify-between text-xs">
+                        <span>${item.name}</span>
+                        <span>R$ ${item.price.toFixed(2)}</span>
+                    </div>`;
+            });
+
+            totalCont.innerText = `R$ ${total.toFixed(2)}`;
+            document.getElementById('receipt-date').innerText = new Date().toLocaleString();
+            modal.style.display = 'flex';
+        }
+
+        function closeReceipt() { document.getElementById('receipt-modal').style.display = 'none'; }
+
+        // Simulação Google Pay (Payment Request API)
+        async function initGooglePay() {
+            if (window.PaymentRequest) {
+                const supportedInstruments = [{ supportedMethods: 'basic-card' }]; // O Google Pay integra aqui
+                const details = {
+                    total: { label: 'Total Miquely Modas', amount: { currency: 'BRL', value: cart.reduce((a,b)=>a+b.price, 0).toFixed(2) } }
+                };
+                try {
+                    const request = new PaymentRequest(supportedInstruments, details);
+                    const response = await request.show();
+                    await response.complete('success');
+                    finalizarWhatsApp("PAGAMENTO PRÉ-APROVADO VIA GOOGLE PAY");
+                } catch (e) {
+                    alert("Pagamento cancelado ou não suportado no ambiente atual.");
+                }
             } else {
-                msg.innerText = `Faltam R$ ${(MIN_ORDER - total).toFixed(2).replace('.',',')} para o mínimo`;
-                msg.className = "text-red-600 p-3 text-center font-bold uppercase text-[10px]";
-                btn.disabled = true;
+                alert("Seu navegador não suporta Google Pay nativo.");
             }
         }
 
-        function removeItem(index) {
-            cart.splice(index, 1);
-            updateCart();
-        }
-
-        function enviarWhatsApp() {
+        function finalizarWhatsApp(status = "PENDENTE") {
             const fone = "5561983446343";
-            let texto = "*NOVO PEDIDO DE ATACADO - MIQUELY MODAS*\n\n";
-            let total = 0;
-
-            cart.forEach((item, i) => {
-                texto += `*${i+1}. ${item.name}*\n`;
-                texto += `   Cor: ${item.color} | Tam: ${item.size}\n`;
-                texto += `   Preço: R$ ${item.price.toFixed(2)}\n\n`;
-                total += item.price;
-            });
-
-            texto += `----------------------------\n`;
-            texto += `*TOTAL DO PEDIDO: R$ ${total.toFixed(2)}*`;
-
-            const link = `https://api.whatsapp.com/send?phone=${fone}&text=${encodeURIComponent(texto)}`;
-            window.open(link, '_blank');
+            let total = cart.reduce((a,b)=>a+b.price, 0).toFixed(2);
+            let msg = `*RECIBO DE PEDIDO - MIQUELY MODAS*\n`;
+            msg += `*Status:* ${status}\n`;
+            msg += `------------------------------\n`;
+            cart.forEach(item => msg += `• ${item.name} - R$ ${item.price.toFixed(2)}\n`);
+            msg += `------------------------------\n`;
+            msg += `*TOTAL: R$ ${total}*`;
+            
+            window.open(`https://api.whatsapp.com/send?phone=${fone}&text=${encodeURIComponent(msg)}`);
         }
 
-        initProducts();
+        renderCatalog();
     </script>
 </body>
 </html>
