@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="pt-br">   
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">     
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atacado | Miquely Modas Lingerie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -22,19 +22,15 @@
         
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .animate-float { animation: float 3s ease-in-out infinite; }
-        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 5px rgba(219, 39, 119, 0.4); opacity: 1; } 50% { box-shadow: 0 0 25px rgba(219, 39, 119, 0.8); opacity: 0.8; } }
-        .animate-pulse-glow { animation: pulse-glow 2s infinite; }
     </style>
 </head>
 <body class="bg-white">
 
     <header class="border-b sticky top-0 bg-white z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex gap-4 md:hidden text-xl"><i class="fa-solid fa-bars"></i></div>
             <div class="text-2xl font-bold tracking-tighter text-black uppercase">
                 Miquely<span class="font-light text-pink-600">Modas</span>
             </div>
-            
             <div class="flex items-center gap-5">
                 <div class="relative cursor-pointer" onclick="toggleCart()">
                     <i class="fa-solid fa-bag-shopping text-2xl"></i>
@@ -43,13 +39,6 @@
             </div>
         </div>
     </header>
-
-    <section class="relative h-[55vh] md:h-[75vh] bg-gray-200 overflow-hidden" id="main-carousel">
-        <a href="https://api.whatsapp.com/send/?phone=5561983446343" target="_blank">
-            <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1765913728_bannerPrincipal2.jpg" class="active">
-            <img src="https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/Principal/1762972131_bannerPrincipal2.jpg">
-        </a>
-    </section>
 
     <div class="promo-bar font-bold">ATACADO - Pedido Mínimo: R$ 700,00</div>
 
@@ -60,7 +49,7 @@
 
     <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl z-[100] translate-x-full cart-sidebar flex flex-col">
         <div class="p-6 border-b flex justify-between items-center bg-gray-50">
-            <h2 class="font-bold uppercase tracking-widest text-sm text-pink-600">Pedido de Atacado</h2>
+            <h2 class="font-bold uppercase tracking-widest text-sm text-pink-600">Minha Sacola</h2>
             <button onclick="toggleCart()" class="text-2xl">&times;</button>
         </div>
         <div id="cart-content" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
@@ -71,21 +60,10 @@
             </div>
             <div id="min-order-msg" class="p-3 text-center mb-4 min-order-alert text-red-600"></div>
             
-            <div class="bg-gray-50 text-center rounded-lg overflow-hidden border">
-                <button id="btn-checkout-appmax" onclick="finalizarPagamentoAppmax()" class="w-full bg-blue-700 text-white py-4 font-bold uppercase text-[12px] shadow-xl hover:bg-blue-800 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
-                    Pagar com Google Pay / Pix / Cartão
-                </button>
-                <p class="text-[9px] py-2 text-gray-500">
-                    Processado com segurança por <strong>Appmax API</strong>.
-                </p>
-            </div>
+            <button id="btn-whatsapp" onclick="enviarWhatsApp()" class="w-full bg-green-600 text-white py-4 font-bold uppercase text-[12px] shadow-xl hover:bg-green-700 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>
+                Finalizar Pedido via WhatsApp
+            </button>
         </div>
-    </div>
-
-    <div class="fixed bottom-6 left-6 z-[100] pointer-events-auto">
-        <a href="https://api.whatsapp.com/send/?phone=5561983446343" target="_blank" class="block animate-float">
-            <img src="https://novidadesnaloja.moda/clientes/47149826000180_20240122230901.jpeg" class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-pink-500 shadow-lg animate-pulse-glow object-cover">
-        </a>
     </div>
 
     <script>
@@ -93,37 +71,13 @@
         const MIN_ORDER = 700;
         let cart = [];
 
-        const extraImages = [
-            "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4132_(3)_ec.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/2022101311531022506_(6)_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206113500_img_7362_e1.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114055_img_7370_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20210629160317ref._4004_(1)_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230330090806whatsapp_image_2023-03-30_at_08.49.20_e1.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20251202095430_intuicao_30_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/20250522113207_img_7152_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4111_(2)_ec.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230519102154_whatsappimage20230519at10183828129_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/9/20231117163638_whatsappimage20231117at150951_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/1/20251006155146_intuicao_31_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/20231120104222_whatsappimage20231117at104556_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250821134227_whatsappimage20250821at120153_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20251202101449_intuicao_1728129_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250821090129_intuicao3_5_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/1/20251218144817_intuicaodez25_31_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206122501_img_7426_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250725112922_whatsappimage20250723at170229_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/26/20250820175544_intuicao3_48_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/25/20250522105424_img_7142_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/7/20250820173918_intuicao3_24_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/25/20251218112643_intuicaodez25_7_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/21/20251006162203_intuicao_17_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/2/20250821095001_intuicao3_8_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/17/20250801100605_img_8262_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/7/20251007082926_intuicao_14_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114319_img_7343_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20250801093940_096a9085_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250715111609_img_8266_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20250909153843_intuicaoset25_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250909141405_intuicaoset25_23_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/2/20250909143127_intuicaoset25_49_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250909144502_intuicaoset25_43_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20251007082031_intuicao_3_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250522101047_img_716828129_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820164925_intuicao3_42_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/20250821084610_intuicao3_27_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820162500_intuicao3_32_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/6/20220307160240whatsapp_image_2022-03-07_at_14.56.51_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1717558113.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716580958.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716578271.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1726157437.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716834000.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20240517104309_whatsappimage20240517at10183128129_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20231002174846_whatsappimage20231002at174112_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20240517102516_whatsappimage20240517at101916_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230911095939_whatsappimage20230904at105708_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818142755_whatsappimage20230818at141504_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623165155_whatsappimage20230623at14352228229_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230815143028_whatsappimage20230815at142018_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818144857_whatsappimage20230818at140055_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg"
-        ];
-
-        function initProducts() {
-            const list = document.getElementById('product-list');
-            list.innerHTML = '';
-            const p1Base = 25.90;
-            const p1Calc = p1Base * MARGEM_LUCRO;
-            list.innerHTML += generateHTML('Calcinha Fio de Renda', p1Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/8/1002_preto_(1).jpg', 'manual-1');
-            const p2Base = 50.67;
-            const p2Calc = p2Base * MARGEM_LUCRO;
-            list.innerHTML += generateHTML('Brallette Radiante', p2Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114055_img_7370_e.jpg', 'manual-2');
-            const p3Base = 47.67;
-            const p3Calc = p3Base * MARGEM_LUCRO;
-            list.innerHTML += generateHTML('Brallette V', p3Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206113500_img_7362_e1.jpg', 'manual-3');
-           
-            extraImages.forEach((url, i) => {
-                const precoBase = 115.00; 
-                const precoCalc = precoBase * MARGEM_LUCRO;
-                list.innerHTML += generateHTML(`Lingerie Ref ${800+i}`, precoCalc, url, i);
-            });
-        }
-
         function generateHTML(name, price, img, id) {
             return `
             <div class="product-card group">
                 <div class="relative overflow-hidden bg-gray-50 aspect-[3/4]">
                     <img src="${img}" class="product-img w-full h-full object-cover">
                     <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-1 bg-black/10">
-                        <select id="color-${id}" class="attr-select"><option>Preto</option><option>Branco</option><option>Rosa</option></select>
+                        <select id="color-${id}" class="attr-select"><option>Preto</option><option>Branco</option><option>Rosa</option><option>Vermelho</option></select>
                         <select id="size-${id}" class="attr-select"><option>P</option><option>M</option><option>G</option><option>GG</option></select>
                         <button onclick="addWithAttrs('${name}', ${price}, '${img}', '${id}')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase">Adicionar</button>
                     </div>
@@ -135,12 +89,84 @@
             </div>`;
         }
 
+        function initProducts() {
+            const list = document.getElementById('product-list');
+            list.innerHTML = '';
+            
+            const p1Base = 125.90;
+            const p1Calc = p1Base * MARGEM_LUCRO;
+            list.innerHTML += generateHTML('Body Manga Longa', p1Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820155538_intuicao3_67_e.jpg', 'p1');
+
+            const links = [
+                ["Conjunto Luxo 4132", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4132_(3)_ec.jpg"],
+                ["Conjunto Renda 22506", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/2022101311531022506_(6)_e.jpg"],
+                ["Brallette V 7362", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206113500_img_7362_e1.jpg"],
+                ["Brallette Radiante 7370", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114055_img_7370_e.jpg"],
+                ["Conjunto Ref 4004", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20210629160317ref._4004_(1)_e.jpg"],
+                ["Lingerie Soft 2023", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230330090806whatsapp_image_2023-03-30_at_08.49.20_e1.jpeg"],
+                ["Lingerie Intuition 30", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20251202095430_intuicao_30_e.jpg"],
+                ["Conjunto Satin 7152", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/20250522113207_img_7152_e.jpg"],
+                ["Conjunto Elegance 4111", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4111_(2)_ec.jpg"],
+                ["Lingerie Glamour", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230519102154_whatsappimage20230519at10183828129_e.jpeg"],
+                ["Conjunto Night", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/9/20231117163638_whatsappimage20231117at150951_e.jpeg"],
+                ["Lingerie Chic 31", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/1/20251006155146_intuicao_31_e.jpg"],
+                ["Lingerie Special", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/20231120104222_whatsappimage20231117at104556_e.jpeg"],
+                ["Conjunto Passion", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250821134227_whatsappimage20250821at120153_e.jpg"],
+                ["Intuition 1728", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20251202101449_intuicao_1728129_e.jpg"],
+                ["Lingerie Delicate 5", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250821090129_intuicao3_5_e.jpg"],
+                ["Conjunto Dezembro 31", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/1/20251218144817_intuicaodez25_31_e.jpg"],
+                ["Brallette Master 7426", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206122501_img_7426_e.jpg"],
+                ["Conjunto Summer", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250725112922_whatsappimage20250723at170229_e.jpg"],
+                ["Lingerie Intuition 48", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/26/20250820175544_intuicao3_48_e.jpg"],
+                ["Conjunto Style 7142", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/25/20250522105424_img_7142_e.jpg"],
+                ["Lingerie Intuition 24", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/7/20250820173918_intuicao3_24_e.jpg"],
+                ["Conjunto Dezembro 7", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/25/20251218112643_intuicaodez25_7_e.jpg"],
+                ["Lingerie Classy 17", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/21/20251006162203_intuicao_17_e.jpg"],
+                ["Lingerie Intuition 8", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/2/20250821095001_intuicao3_8_e.jpg"],
+                ["Conjunto Dream 8262", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/17/20250801100605_img_8262_e.jpg"],
+                ["Lingerie Intuition 14", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/7/20251007082926_intuicao_14_e.jpg"],
+                ["Conjunto Beauty 7343", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114319_img_7343_e.jpg"],
+                ["Conjunto Classic 9085", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20250801093940_096a9085_e.jpg"],
+                ["Lingerie Modern 8266", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250715111609_img_8266_e.jpg"],
+                ["Lingerie Setembro", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20250909153843_intuicaoset25_e.jpg"],
+                ["Lingerie Setembro 23", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250909141405_intuicaoset25_23_e.jpg"],
+                ["Lingerie Setembro 49", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/2/20250909143127_intuicaoset25_49_e.jpg"],
+                ["Lingerie Setembro 43", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250909144502_intuicaoset25_43_e.jpg"],
+                ["Lingerie Intuition 3", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20251007082031_intuicao_3_e.jpg"],
+                ["Conjunto Shine 7168", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250522101047_img_716828129_e.jpg"],
+                ["Lingerie Intuition 42", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820164925_intuicao3_42_e.jpg"],
+                ["Lingerie Intuition 27", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/20250821084610_intuicao3_27_e.jpg"],
+                ["Lingerie Intuition 32", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820162500_intuicao3_32_e.jpg"],
+                ["Conjunto Março Especial", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/6/20220307160240whatsapp_image_2022-03-07_at_14.56.51_e.jpg"],
+                ["Lingerie API 113", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1717558113.jpeg"],
+                ["Lingerie API 958", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716580958.jpeg"],
+                ["Lingerie API 271", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716578271.jpeg"],
+                ["Lingerie API 437", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1726157437.jpeg"],
+                ["Lingerie API 000", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716834000.jpeg"],
+                ["Conjunto Maio Glam", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20240517104309_whatsappimage20240517at10183128129_e.jpeg"],
+                ["Conjunto Outubro", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20231002174846_whatsappimage20231002at174112_e.jpeg"],
+                ["Lingerie Fashion 16", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20240517102516_whatsappimage20240517at101916_e.jpeg"],
+                ["Conjunto Setembro Lux", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230911095939_whatsappimage20230904at105708_e.jpeg"],
+                ["Conjunto Agosto Top", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818142755_whatsappimage20230818at141504_e.jpeg"],
+                ["Lingerie Junho Art", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623165155_whatsappimage20230623at14352228229_e.jpg"],
+                ["Conjunto Agosto 18", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230815143028_whatsappimage20230815at142018_e.jpeg"],
+                ["Conjunto Agosto 55", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818144857_whatsappimage20230818at140055_e.jpeg"],
+                ["Lingerie Junho 18", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg"]
+            ];
+
+            links.forEach((item, i) => {
+                const precoBase = 115.00;
+                const precoCalc = precoBase * MARGEM_LUCRO;
+                list.innerHTML += generateHTML(item[0], precoCalc, item[1], `v${i}`);
+            });
+        }
+
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
 
         function addWithAttrs(name, price, img, id) {
             const color = document.getElementById(`color-${id}`).value;
             const size = document.getElementById(`size-${id}`).value;
-            cart.push({name: `${name} (${color}/${size})`, price, img});
+            cart.push({name, color, size, price, img});
             updateCart();
             toggleCart();
         }
@@ -149,86 +175,62 @@
             const content = document.getElementById('cart-content');
             const totalEl = document.getElementById('cart-total');
             const msg = document.getElementById('min-order-msg');
-            const btn = document.getElementById('btn-checkout-appmax');
+            const btn = document.getElementById('btn-whatsapp');
             let total = 0;
+            
             content.innerHTML = cart.length ? '' : '<p class="text-center py-10 text-[10px]">Sacola vazia</p>';
+            
             cart.forEach((item, i) => {
                 total += item.price;
-                content.innerHTML += `<div class="flex gap-4 border-b pb-2"><img src="${item.img}" class="w-10 h-14 object-cover"><div><p class="text-[10px] font-bold uppercase">${item.name}</p><p class="text-pink-600 font-bold">R$ ${item.price.toFixed(2)}</p></div></div>`;
+                content.innerHTML += `
+                <div class="flex gap-4 border-b pb-2">
+                    <img src="${item.img}" class="w-10 h-14 object-cover">
+                    <div class="flex-1">
+                        <p class="text-[10px] font-bold uppercase">${item.name}</p>
+                        <p class="text-[9px] text-gray-500">${item.color} / ${item.size}</p>
+                        <p class="text-pink-600 font-bold">R$ ${item.price.toFixed(2)}</p>
+                    </div>
+                    <button onclick="removeItem(${i})" class="text-gray-400 text-xs">Remover</button>
+                </div>`;
             });
-            totalEl.innerText = `R$ ${total.toFixed(2)}`;
+
+            totalEl.innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
             document.getElementById('cart-count').innerText = cart.length;
+
             if(total >= MIN_ORDER) {
-                msg.innerText = "✓ Mínimo atingido!"; msg.className = "text-green-600 p-3 text-center font-bold uppercase text-[10px]";
-                btn.disabled = false; btn.className = "w-full bg-blue-700 text-white py-4 font-bold uppercase text-[12px] shadow-xl hover:bg-blue-800 transition-all";
+                msg.innerText = "✓ Pedido Mínimo Atingido!";
+                msg.className = "text-green-600 p-3 text-center font-bold uppercase text-[10px]";
+                btn.disabled = false;
             } else {
-                msg.innerText = `Faltam R$ ${(MIN_ORDER - total).toFixed(2)}`; msg.className = "text-red-600 p-3 text-center font-bold uppercase text-[10px]";
-                btn.disabled = true; btn.className = "w-full bg-gray-300 text-white py-4 font-bold uppercase text-[12px] cursor-not-allowed";
+                msg.innerText = `Faltam R$ ${(MIN_ORDER - total).toFixed(2).replace('.',',')} para o mínimo`;
+                msg.className = "text-red-600 p-3 text-center font-bold uppercase text-[10px]";
+                btn.disabled = true;
             }
         }
 
-        async function finalizarPagamentoAppmax() {
-    const btn = document.getElementById('btn-checkout-appmax');
-    const originalText = btn.innerText;
-    
-    btn.innerText = "PROCESSANDO PEDIDO...";
-    btn.disabled = true;
-
-    try {
-        const totalRaw = document.getElementById('cart-total').innerText;
-        const totalNum = parseFloat(totalRaw.replace('R$ ', '').replace('.', '').replace(',', '.'));
-
-         const payload = {
-        total: totalNum,
-        products: cart.map(item => ({
-            name: item.name,
-            qty: 1,
-            price: item.price
-        }))
-    };
-        const awsEndpoint = 'https://org3zgdxvga5sb377l7yjgyfuu0wmapq.lambda-url.sa-east-1.on.aws/';
-
-        const response = await fetch(awsEndpoint, {
-            method: 'POST',
-            mode: 'cors', // Força o modo CORS para evitar bloqueios
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        // Melhoria: Se a AWS responder com texto (Erro Interno ou Online), tratamos aqui
-        const textData = await response.text();
-        let result;
-        
-        try {
-            result = JSON.parse(textData);
-        } catch (e) {
-            throw new Error("A AWS enviou uma resposta que não é um link válido: " + textData);
-        }
-        
-        if (result.url) {
-            window.location.href = result.url; // Redireciona para o checkout da Appmax
-        } else {
-            alert("A Appmax não gerou o link. Motivo: " + (result.error || "Verifique o log da Lambda"));
-            console.log("Resposta completa da AWS:", result);
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCart();
         }
 
-    } catch (error) {
-        console.error("Erro no Checkout:", error);
-        // Se cair aqui, é porque o CORS na AWS ainda está bloqueando ou a Lambda não deu Deploy
-        alert("Erro na conexão com a AWS. Verifique se o DEPLOY foi feito na Lambda.");
-    } finally {
-        btn.innerText = originalText;
-        btn.disabled = false;
-    }
-}
+        function enviarWhatsApp() {
+            const fone = "5561983446343";
+            let texto = "*NOVO PEDIDO DE ATACADO - MIQUELY MODAS*\n\n";
+            let total = 0;
 
-        const slides = document.querySelectorAll('#main-carousel img');
-        let cur = 0;
-        setInterval(() => {
-            slides[cur].classList.remove('active');
-            cur = (cur + 1) % slides.length;
-            slides[cur].classList.add('active');
-        }, 4500);
+            cart.forEach((item, i) => {
+                texto += `*${i+1}. ${item.name}*\n`;
+                texto += `   Cor: ${item.color} | Tam: ${item.size}\n`;
+                texto += `   Preço: R$ ${item.price.toFixed(2)}\n\n`;
+                total += item.price;
+            });
+
+            texto += `----------------------------\n`;
+            texto += `*TOTAL DO PEDIDO: R$ ${total.toFixed(2)}*`;
+
+            const link = `https://api.whatsapp.com/send?phone=${fone}&text=${encodeURIComponent(texto)}`;
+            window.open(link, '_blank');
+        }
 
         initProducts();
     </script>
