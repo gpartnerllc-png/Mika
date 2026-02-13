@@ -367,13 +367,7 @@
             const p58Calc = p58Base * MARGEM_LUCRO;
             list.innerHTML += generateHTML('Bore Manga Longa', p58Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg', 'manual-58');
             
-            extraImages.forEach((url, i) => {
-                const precoBase = 19.33; 
-                const precoCalc = precoBase * MARGEM_LUCRO;
-                list.innerHTML += generateHTML(`Lingerie Ref ${800+i}`, precoCalc, url, i);
-                
-            });
-            
+           
         }
 
         function generateHTML(name, price, img, id) {
