@@ -454,7 +454,7 @@
                 };
             }
 
-            async function finalizarPagamentoInfinitePay() {
+    async function finalizarPagamentoInfinitePay() {
     const btnCheckout = document.querySelector('#payment-modal button');
     const originalText = btnCheckout.innerText;
     btnCheckout.innerText = "GERANDO PIX...";
@@ -475,7 +475,7 @@
             metadata: {
                 customer_name: customerData.name,
                 customer_cpf: customerData.cpf,
-                project: "SandxCDD_Lingerie"
+                project: "Lingerie"
             }
         };
 
