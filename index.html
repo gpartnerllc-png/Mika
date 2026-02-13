@@ -363,8 +363,39 @@
             list.innerHTML += generateHTML('Bore Manga Longa', p58Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg', 'manual-58');    
         }
 
-       <script>
-  
+      <script>
+    // --- CONFIGURAÇÕES GLOBAIS ---
+    const MARGEM_LUCRO = 1.50; 
+    const MIN_ORDER = 800;
+    const awsEndpoint = 'https://org3zgdxvga5sb377l7yjgyfuu0wmapq.lambda-url.sa-east-1.on.aws/';
+    let cart = [];
+    let customerData = {}; 
+    let selectedMethod = 'pix';
+
+    // --- INICIALIZAÇÃO ---
+    function initProducts() {
+        const list = document.getElementById('product-list');
+        if(!list) return;
+        list.innerHTML = '';
+
+        const extraImages = [
+            "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/8/1002_preto_(1).jpg",
+            "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716828210.jpeg",
+            "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/9/20230313152013whatsapp_image_2023-03-13_at_15.17.49_e.jpg"
+        ];
+
+        const produtosData = [
+            { nome: 'Calcinha Fio de Renda', custo: 25.90 },
+            { nome: 'Sutiã Tomara q Caia', custo: 65.77 },
+            { nome: 'Conjunto Short Doll', custo: 77.67 }
+        ];
+
+        extraImages.forEach((url, i) => {
+            const info = produtosData[i] || { nome: `Lingerie Ref ${800 + i}`, custo: 50.00 };
+            const precoCalc = info.custo * MARGEM_LUCRO;
+            list.innerHTML += generateHTML(info.nome, precoCalc, url, i);
+        });
+    }
 
     function generateHTML(name, price, img, id) {
         return `
@@ -467,7 +498,56 @@
         try { await fetch(awsEndpoint, { method: 'POST', body: JSON.stringify(payload) }); } catch (e) {}
     }
 
- 
+    // Função Unificada para InfinitePay
+    async function finalizarPagamento() {
+        const name = document.getElementById('cust-name').value;
+        const email = document.getElementById('cust-email').value;
+        const cpf = document.getElementById('cust-cpf').value;
+        const consent = document.getElementById('lgpd-consent').checked;
+
+        if(!name || !email || !cpf) { alert("Preencha os campos obrigatórios."); return; }
+        if(!consent) { alert("Você precisa aceitar os termos da LGPD."); return; }
+
+        const btnCheckout = document.querySelector('#payment-modal button');
+        const originalText = btnCheckout.innerText;
+        btnCheckout.innerText = "GERANDO PIX...";
+        btnCheckout.disabled = true;
+
+        // Primeiro Sincroniza o Lead
+        await syncLead();
+
+        try {
+            const payload = {
+                action: 'checkout_infinitepay',
+                handle: "partner12",
+                items: cart.map(item => ({
+                    quantity: 1,
+                    price: Math.round(item.price * 100), // Converte para centavos
+                    description: item.name
+                })),
+                customer: { name, email, cpf, phone: document.getElementById('cust-phone').value }
+            };
+
+            const response = await fetch(awsEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.success && result.url) {
+                window.location.href = result.url;
+            } else {
+                alert("Erro InfinitePay: " + (result.message || "Tente novamente"));
+            }
+        } catch (error) {
+            alert("Erro na conexão com o servidor.");
+        } finally {
+            btnCheckout.innerText = originalText;
+            btnCheckout.disabled = false;
+        }
+    }
 
     // --- EFEITOS VISUAIS ---
     const slides = document.querySelectorAll('#main-carousel img');
