@@ -362,11 +362,7 @@
             const p58Calc = p58Base * MARGEM_LUCRO;
             list.innerHTML += generateHTML('Bore Manga Longa', p58Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg', 'manual-58');    
         }
-        // --- CONFIGURAÇÕES INICIAIS ---
-const awsEndpoint = 'SUA_URL_DA_LAMBDA_AQUI'; // Substitua pela sua URL da AWS
-const MIN_ORDER = 700;
-let cart = [];
-let selectedMethod = 'pix'; // Padrão inicial
+
 
 // --- FUNÇÃO DE ADICIONAR AO CARRINHO (Com correção de Imagem) ---
 function addWithAttrs(name, price, img, id) {
