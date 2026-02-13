@@ -382,17 +382,7 @@
         }
 
                  
-            totalEl.innerText = `R$ ${total.toFixed(2)}`;
-            document.getElementById('cart-count').innerText = cart.length;
-            if(total >= MIN_ORDER) {
-                msg.innerText = "✓ Pedido Mínimo Atingido"; msg.className = "text-green-600 p-3 text-center font-bold uppercase text-[10px]";
-                btn.disabled = false; btn.className = "w-full bg-blue-700 text-white py-4 font-bold uppercase text-[12px] shadow-xl hover:bg-blue-800 transition-all rounded-2xl";
-            } else {
-                msg.innerText = `Faltam R$ ${(MIN_ORDER - total).toFixed(2)} para o atacado`; msg.className = "text-red-600 p-3 text-center font-bold uppercase text-[10px]";
-                btn.disabled = true; btn.className = "w-full bg-gray-300 text-white py-4 font-bold uppercase text-[12px] cursor-not-allowed rounded-2xl";
-            }
-        }
-
+         
         async function finalizarPagamento() {
             const btnCheckout = document.querySelector('#payment-modal button');
             const originalText = btnCheckout.innerText;
