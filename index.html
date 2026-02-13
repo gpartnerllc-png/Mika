@@ -380,6 +380,36 @@
                 </div>
             </div>`;
         }
+         function updateCart() {
+            const content = document.getElementById('cart-content');
+            const totalEl = document.getElementById('cart-total');
+            const msg = document.getElementById('min-order-msg');
+            const btn = document.getElementById('btn-checkout-appmax');
+            let total = 0;
+            content.innerHTML = cart.length ? '' : '<p class="text-center py-10 text-[10px] uppercase font-bold text-gray-400 tracking-widest">Sua sacola está vazia</p>';
+            
+            cart.forEach((item, i) => {
+                total += item.price;
+                content.innerHTML += `
+                <div class="flex gap-4 border-b pb-3 items-center group">
+                    <img src="${item.img}" class="w-12 h-16 object-cover rounded-xl shadow-md border border-gray-100">
+                    <div class="flex-1">
+                        <p class="text-[9px] font-bold uppercase tracking-tighter text-gray-800">${item.name}</p>
+                        <p class="text-pink-600 font-bold text-sm">R$ ${item.price.toFixed(2)}</p>
+                    </div>
+                </div>`;
+            });
+
+   totalEl.innerText = `R$ ${total.toFixed(2)}`;
+            document.getElementById('cart-count').innerText = cart.length;
+            if(total >= MIN_ORDER) {
+                msg.innerText = "✓ Pedido Mínimo Atingido"; msg.className = "text-green-600 p-3 text-center font-bold uppercase text-[10px]";
+                btn.disabled = false; btn.className = "w-full bg-blue-700 text-white py-4 font-bold uppercase text-[12px] shadow-xl hover:bg-blue-800 transition-all rounded-2xl";
+            } else {
+                msg.innerText = `Faltam R$ ${(MIN_ORDER - total).toFixed(2)} para o atacado`; msg.className = "text-red-600 p-3 text-center font-bold uppercase text-[10px]";
+                btn.disabled = true; btn.className = "w-full bg-gray-300 text-white py-4 font-bold uppercase text-[12px] cursor-not-allowed rounded-2xl";
+            }
+        }
 
                  
          
