@@ -454,7 +454,55 @@
                 };
             }
 
-            finalizarPagamentoAppmax();
+            async function finalizarPagamentoInfinitePay() {
+    const btnCheckout = document.querySelector('#payment-modal button');
+    const originalText = btnCheckout.innerText;
+    btnCheckout.innerText = "GERANDO PIX...";
+    btnCheckout.disabled = true;
+
+    // Cálculo do total para a InfinitePay (convertendo para centavos se necessário)
+    const totalCarrinho = cart.reduce((sum, item) => sum + item.price, 0);
+
+    try {
+        const payload = {
+            action: 'checkout_infinitepay', // Novo identificador para sua Lambda
+            handle: "partner12", // Seu handle da InfinitePay
+            items: cart.map(item => ({
+                quantity: 1,
+                price: Math.round(item.price * 100), // InfinitePay costuma usar centavos (R$ 10,00 = 1000)
+                description: item.name
+            })),
+            metadata: {
+                customer_name: customerData.name,
+                customer_cpf: customerData.cpf,
+                project: "SandxCDD_Lingerie"
+            }
+        };
+
+        const response = await fetch(awsEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        // Lógica de resposta baseada no SandxCDD Logistics
+        if (result.success && result.url) {
+            // Redireciona para o checkout da InfinitePay ou abre o link do PIX
+            window.location.href = result.url;
+        } else {
+            alert("Erro ao gerar pagamento: " + (result.message || "Verifique os dados"));
+        }
+
+    } catch (error) {
+        console.error("Erro InfinitePay:", error);
+        alert("Erro na conexão com a InfinitePay. Tente novamente.");
+    } finally {
+        btnCheckout.innerText = originalText;
+        btnCheckout.disabled = false;
+    }
+
         }
 
         function addWithAttrs(name, price, img, id) {
@@ -496,7 +544,7 @@
             }
         }
 
-        async function finalizarPagamentoAppmax() {
+        async function finalizarPagamento() {
             const btnCheckout = document.querySelector('#payment-modal button');
             const originalText = btnCheckout.innerText;
             btnCheckout.innerText = "PROCESSANDO...";
