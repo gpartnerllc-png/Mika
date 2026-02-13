@@ -184,8 +184,6 @@
         let customerData = {}; 
         let selectedMethod = 'pix';
 
-        
-
         function initProducts() {
             const list = document.getElementById('product-list');
             list.innerHTML = '';
@@ -362,9 +360,7 @@
             list.innerHTML += generateHTML('Calcinha Fio D Delicotton', p57Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818144857_whatsappimage20230818at140055_e.jpeg', 'manual-57');
             const p58Base = 19.33;
             const p58Calc = p58Base * MARGEM_LUCRO;
-            list.innerHTML += generateHTML('Bore Manga Longa', p58Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg', 'manual-58');
-            
-           
+            list.innerHTML += generateHTML('Bore Manga Longa', p58Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg', 'manual-58');    
         }
 
         function generateHTML(name, price, img, id) {
@@ -427,31 +423,6 @@
                 });
             } catch (e) { console.warn("Lead sync offline"); }
         }
-
-        async function confirmarDadosAppmax() {
-            const name = document.getElementById('cust-name').value;
-            const email = document.getElementById('cust-email').value;
-            const cpf = document.getElementById('cust-cpf').value;
-            const consent = document.getElementById('lgpd-consent').checked;
-
-            if(!name || !email || !cpf) { alert("Preencha os campos obrigatórios."); return; }
-            if(!consent) { alert("Você precisa aceitar os termos da LGPD."); return; }
-            
-            customerData = { 
-                name, email, cpf, 
-                phone: document.getElementById('cust-phone').value,
-                method: selectedMethod
-            };
-
-            if(selectedMethod === 'card') {
-                customerData.card = {
-                    number: document.getElementById('card-number').value,
-                    month: document.getElementById('card-month').value,
-                    year: document.getElementById('card-year').value,
-                    cvv: document.getElementById('card-cvv').value,
-                    installments: document.getElementById('card-installments').value
-                };
-            }
 
     async function finalizarPagamentoInfinitePay() {
     const btnCheckout = document.querySelector('#payment-modal button');
