@@ -362,6 +362,160 @@
             const p58Calc = p58Base * MARGEM_LUCRO;
             list.innerHTML += generateHTML('Bore Manga Longa', p58Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg', 'manual-58');    
         }
+        // --- CONFIGURAÇÕES INICIAIS ---
+const awsEndpoint = 'SUA_URL_DA_LAMBDA_AQUI'; // Substitua pela sua URL da AWS
+const MIN_ORDER = 700;
+let cart = [];
+let selectedMethod = 'pix'; // Padrão inicial
+
+// --- FUNÇÃO DE ADICIONAR AO CARRINHO (Com correção de Imagem) ---
+function addWithAttrs(name, price, img, id) {
+    const color = document.getElementById(`color-${id}`).value;
+    const size = document.getElementById(`size-${id}`).value;
+    
+    // Adicionamos ao carrinho garantindo que o objeto tenha o campo 'img'
+    cart.push({
+        name: `${name} (${color}/${size})`, 
+        price: price, 
+        img: img 
+    });
+    
+    updateCart();
+    toggleCart();
+}
+
+// --- ATUALIZAÇÃO DO CARRINHO (Visualização das Imagens) ---
+function updateCart() {
+    const content = document.getElementById('cart-content');
+    const totalEl = document.getElementById('cart-total');
+    const msg = document.getElementById('min-order-msg');
+    const btn = document.getElementById('btn-checkout-appmax'); // Seu botão de abrir modal
+    
+    let total = 0;
+    content.innerHTML = cart.length ? '' : '<p class="text-center py-10 text-[10px] uppercase font-bold text-gray-400 tracking-widest">Sua sacola está vazia</p>';
+    
+    cart.forEach((item, i) => {
+        total += item.price;
+        content.innerHTML += `
+        <div class="flex gap-4 border-b pb-3 items-center group">
+            <img src="${item.img}" class="w-12 h-16 object-cover rounded-xl shadow-md border border-gray-100" onerror="this.src='https://via.placeholder.com/150'">
+            <div class="flex-1">
+                <p class="text-[9px] font-bold uppercase tracking-tighter text-gray-800">${item.name}</p>
+                <p class="text-pink-600 font-bold text-sm">R$ ${item.price.toFixed(2)}</p>
+            </div>
+            <button onclick="removeItem(${i})" class="text-gray-300 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-trash-can text-xs"></i>
+            </button>
+        </div>`;
+    });
+
+    totalEl.innerText = `R$ ${total.toFixed(2)}`;
+    document.getElementById('cart-count').innerText = cart.length;
+
+    // Lógica do Pedido Mínimo
+    if(total >= MIN_ORDER) {
+        msg.innerText = "✓ Pedido Mínimo Atingido";
+        msg.className = "text-green-600 p-3 text-center font-bold uppercase text-[10px]";
+        btn.disabled = false;
+        btn.className = "w-full bg-blue-700 text-white py-4 font-bold uppercase text-[12px] shadow-xl hover:bg-blue-800 transition-all rounded-2xl";
+    } else {
+        msg.innerText = `Faltam R$ ${(MIN_ORDER - total).toFixed(2)} para o atacado`;
+        msg.className = "text-red-600 p-3 text-center font-bold uppercase text-[10px]";
+        btn.disabled = true;
+        btn.className = "w-full bg-gray-300 text-white py-4 font-bold uppercase text-[12px] cursor-not-allowed rounded-2xl";
+    }
+}
+
+// --- LÓGICA DO MODAL 3D ---
+function selectMethod(method) {
+    selectedMethod = method;
+    // Remove 'active' de todos os cards 3D
+    document.querySelectorAll('.card-3d').forEach(el => {
+        el.classList.remove('active', 'border-blue-600', 'ring-2', 'ring-blue-200');
+    });
+    
+    // Adiciona destaque ao selecionado
+    const el = document.getElementById(`method-${method}`);
+    if(el) {
+        el.classList.add('active', 'border-blue-600', 'ring-2', 'ring-blue-200');
+    }
+    
+    // Mostra ou esconde campos de cartão
+    const cardFields = document.getElementById('card-fields');
+    if(cardFields) {
+        cardFields.classList.toggle('hidden', method !== 'card');
+    }
+}
+
+// --- FINALIZAÇÃO INFINITEPAY ---
+async function finalizarPagamento() {
+    const name = document.getElementById('cust-name').value;
+    const email = document.getElementById('cust-email').value;
+    const cpf = document.getElementById('cust-cpf').value;
+    const phone = document.getElementById('cust-phone').value;
+    const consent = document.getElementById('lgpd-consent').checked;
+
+    if(!name || !email || !cpf || !phone) { alert("Preencha todos os dados."); return; }
+    if(!consent) { alert("Aceite os termos da LGPD."); return; }
+
+    const btnCheckout = document.querySelector('#payment-modal .btn-finalizar');
+    const originalText = btnCheckout.innerText;
+    btnCheckout.innerText = "PROCESSANDO...";
+    btnCheckout.disabled = true;
+
+    // Sincroniza Lead (SandxCDD Folder)
+    await syncLead();
+
+    const payload = {
+        action: 'checkout_infinitepay',
+        handle: "partner12",
+        method: selectedMethod, // pix ou card
+        customer: {
+            name,
+            email,
+            document: cpf.replace(/\D/g, ''),
+            phone: phone.replace(/\D/g, '')
+        },
+        items: cart.map(item => ({
+            quantity: 1,
+            price: Math.round(item.price * 100), // Centavos
+            description: item.name
+        }))
+    };
+
+    // Se for cartão, anexa os dados (CUIDADO: Em produção, use iFrame/Token do Gateway)
+    if(selectedMethod === 'card') {
+        payload.card = {
+            number: document.getElementById('card-number').value.replace(/\s/g, ''),
+            month: document.getElementById('card-month').value,
+            year: document.getElementById('card-year').value,
+            cvv: document.getElementById('card-cvv').value,
+            installments: document.getElementById('card-installments').value
+        };
+    }
+
+    try {
+        const response = await fetch(awsEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.url) {
+            window.location.href = result.url; // Redireciona para o Checkout InfinitePay
+        } else {
+            alert("Erro: " + (result.message || "Tente novamente"));
+        }
+    } catch (error) {
+        console.error("Erro:", error);
+        alert("Erro na conexão com o servidor.");
+    } finally {
+        btnCheckout.innerText = originalText;
+        btnCheckout.disabled = false;
+    }
+}
 
         // Configurações Fixas
 const CHAVE_PIX = "47149826000180"; // Seu CNPJ
