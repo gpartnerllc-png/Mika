@@ -557,5 +557,83 @@
 
         initProducts();
     </script>
+
+ <script>
+    // --- LÓGICA INTEGRADA SANDXCDD ---
+
+function calcularFreteDinamico(cepDestino, servico) {
+    const cepOrigem = "72915484"; // Sua base configurada no SandxCDD
+    const d1 = parseInt(cepOrigem[0]);
+    const d2 = parseInt(cepDestino[0]);
+    
+    // Cálculo base de distância do sistema
+    let custoLogistico = 15.88 + (Math.abs(d1 - d2) * 4.20);
+    
+    // Diferenciação SEDEX vs PAC
+    if (servico === "04014") { // SEDEX
+        custoLogistico = (custoLogistico * 1.75) + 33.33;
+    } else { // PAC
+        custoLogistico += 12.50; 
+    }
+    
+    return custoLogistico;
+}
+
+async function confirmarDadosAppmax() {
+    const totalCarrinho = parseFloat(document.getElementById('cart-total').innerText.replace('R$ ', '').replace(',', '.'));
+    const cepCliente = document.getElementById('cust-cep').value.replace(/\D/g, '');
+    
+    // 1. Calcula Frete usando a lógica do SandxCDD
+    const valorFrete = calcularFreteDinamico(cepCliente, "04510"); // Padrão PAC
+    const valorFinal = (totalCarrinho + valorFrete).toFixed(2);
+    
+    // 2. Gera o PIX Dinâmico (Lógica de Checkout)
+    const chavePix = "47149826000180"; // Seu CNPJ
+    const payloadPix = `00020101021226580014br.gov.bcb.pix0114${chavePix}52040000530398654${valorFinal.length}${valorFinal}5802BR5913MIQUELYMODAS6008BRASILIA62070503***6304`;
+
+    // 3. Notifica Telegram (SandxCDD Bot)
+    enviarRelatorioTelegram(valorFinal, valorFrete);
+
+    // 4. Exibe o QR Code (Pode usar a API que já usamos)
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(payloadPix)}`;
+    
+    // Abre modal de pagamento ou redireciona
+    alert(`Pedido Calculado com Sucesso!\nSubtotal: R$ ${totalCarrinho}\nFrete: R$ ${valorFrete.toFixed(2)}\nTotal: R$ ${valorFinal}`);
+    window.open(qrUrl, '_blank');
+}
+
+function enviarRelatorioTelegram(total, frete) {
+    const nome = document.getElementById('cust-name').value;
+    const msg = `🔔 *NOVA VENDA ATACADO*\n👤 Cliente: ${nome}\n🚚 Frete: R$ ${frete}\n💰 Total: R$ ${total}`;
+    
+    // Aqui você usa o fetch do seu bot que já está configurado no SandxCDD
+}
+   
 </body>
+
+    <footer class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t py-4 z-[150] shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+                    <i class="fa-solid fa-shield-halved text-emerald-600 text-sm"></i>
+                    <span class="text-[9px] font-extrabold text-emerald-800 uppercase tracking-tighter">Site Criptografado (SSL)</span>
+                </div>
+                <div class="hidden md:flex flex-col text-[8px] text-gray-400 font-bold uppercase tracking-widest">
+                    <span>Proteção de Dados</span>
+                    <span class="text-pink-500">Conforme LGPD</span>
+                </div>
+            </div>
+
+            <div class="text-center md:text-right">
+                <div class="text-sm font-black tracking-tighter text-black uppercase">
+                    Miquely<span class="text-pink-600">Modas</span> <span class="text-[9px] font-normal text-gray-400 italic">Partner</span>
+                </div>
+                <p class="text-[9px] text-gray-500 font-bold">CNPJ: 47.149.826/0001-80</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+                                     </script>
 </html>
