@@ -361,68 +361,220 @@
             const p58Base = 19.33;
             const p58Calc = p58Base * MARGEM_LUCRO;
             list.innerHTML += generateHTML('Bore Man
-        function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+                                           
+       <script>
+        const MARGEM_LUCRO = 1.50; 
+        const MIN_ORDER = 700;
+        const awsEndpoint = 'https://org3zgdxvga5sb377l7yjgyfuu0wmapq.lambda-url.sa-east-1.on.aws/';
+        let cart = [];
+        let customerData = {}; 
+        let selectedMethod = 'pix';
+
+        const extraImages = [
+            "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4132_(3)_ec.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/2022101311531022506_(6)_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206113500_img_7362_e1.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114055_img_7370_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20210629160317ref._4004_(1)_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230330090806whatsapp_image_2023-03-30_at_08.49.20_e1.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20251202095430_intuicao_30_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/20250522113207_img_7152_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/15/4111_(2)_ec.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230519102154_whatsappimage20230519at10183828129_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/9/20231117163638_whatsappimage20231117at150951_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/1/20251006155146_intuicao_31_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/20231120104222_whatsappimage20231117at104556_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250821134227_whatsappimage20250821at120153_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20251202101449_intuicao_1728129_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250821090129_intuicao3_5_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/1/20251218144817_intuicaodez25_31_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206122501_img_7426_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250725112922_whatsappimage20250723at170229_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/26/20250820175544_intuicao3_48_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/25/20250522105424_img_7142_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/7/20250820173918_intuicao3_24_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/25/20251218112643_intuicaodez25_7_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/21/20251006162203_intuicao_17_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/2/20250821095001_intuicao3_8_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/17/20250801100605_img_8262_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/7/20251007082926_intuicao_14_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114319_img_7343_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20250801093940_096a9085_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250715111609_img_8266_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/11/20250909153843_intuicaoset25_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20250909141405_intuicaoset25_23_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/2/20250909143127_intuicaoset25_49_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250909144502_intuicaoset25_43_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20251007082031_intuicao_3_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/28/20250522101047_img_716828129_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820164925_intuicao3_42_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/22/20250821084610_intuicao3_27_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820162500_intuicao3_32_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/6/20220307160240whatsapp_image_2022-03-07_at_14.56.51_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1717558113.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716580958.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716578271.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1726157437.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716834000.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20240517104309_whatsappimage20240517at10183128129_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20231002174846_whatsappimage20231002at174112_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20240517102516_whatsappimage20240517at101916_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230911095939_whatsappimage20230904at105708_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818142755_whatsappimage20230818at141504_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623165155_whatsappimage20230623at14352228229_e.jpg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230815143028_whatsappimage20230815at142018_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230818144857_whatsappimage20230818at140055_e.jpeg", "https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/19/20230623155233_whatsappimage20230623at143518_e.jpg"
+        ];
+
+        function initProducts() {
+            const list = document.getElementById('product-list');
+            list.innerHTML = '';
+            const p1Base = 25.90;
+            const p1Calc = p1Base * MARGEM_LUCRO;
+            list.innerHTML += generateHTML('Calcinha Fio de Renda', p1Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/8/1002_preto_(1).jpg', 'manual-1');
+            const p2Base = 50.67;
+            const p2Calc = p2Base * MARGEM_LUCRO;
+            list.innerHTML += generateHTML('Brallette Radiante', p2Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206114055_img_7370_e.jpg', 'manual-2');
+            const p3Base = 47.67;
+            const p3Calc = p3Base * MARGEM_LUCRO;
+            list.innerHTML += generateHTML('Brallette V', p3Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/24/20231206113500_img_7362_e1.jpg', 'manual-3');
+            
+            extraImages.forEach((url, i) => {
+                const precoBase = 115.00; 
+                const precoCalc = precoBase * MARGEM_LUCRO;
+                list.innerHTML += generateHTML(`Lingerie Ref ${800+i}`, precoCalc, url, i);
+            });
         }
 
-        function addToCart(name, price, img) {
-            cart.push({name, price, img});
-            updateCart();
-            if(document.getElementById('cart-sidebar').classList.contains('translate-x-full')) {
-                toggleCart();
+        function generateHTML(name, price, img, id) {
+            return `
+            <div class="product-card group">
+                <div class="relative overflow-hidden bg-gray-50 aspect-[3/4] rounded-3xl shadow-md border border-gray-100">
+                    <img src="${img}" class="product-img w-full h-full object-cover">
+                    <div class="absolute bottom-0 w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-1 bg-black/20 backdrop-blur-sm">
+                        <select id="color-${id}" class="attr-select"><option>Preto</option><option>Branco</option><option>Rosa</option></select>
+                        <select id="size-${id}" class="attr-select"><option>P</option><option>M</option><option>G</option><option>GG</option></select>
+                        <button onclick="addWithAttrs('${name}', ${price}, '${img}', '${id}')" class="w-full bg-black text-white py-3 text-[10px] font-bold uppercase rounded-lg">Adicionar</button>
+                    </div>
+                </div>
+                <div class="mt-4 text-center px-2">
+                    <h4 class="text-[10px] text-gray-400 uppercase font-bold tracking-tighter">${name}</h4>
+                    <p class="font-bold text-base mt-1 text-black">R$ ${price.toFixed(2).replace('.',',')}</p>
+                </div>
+            </div>`;
+        }
+
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('translate-x-full'); }
+
+        function openPaymentModal() { 
+            document.getElementById('payment-modal').classList.remove('hidden'); 
+            selectMethod('pix');
+        }
+        
+        function closePaymentModal() { document.getElementById('payment-modal').classList.add('hidden'); }
+        
+        function selectMethod(method) {
+            selectedMethod = method;
+            document.querySelectorAll('.card-3d').forEach(el => el.classList.remove('active'));
+            const el = document.getElementById(`method-${method}`);
+            if(el) el.classList.add('active');
+            document.getElementById('card-fields').classList.toggle('hidden', method !== 'card');
+        }
+
+        // --- TECNOLOGIA DE CAPTURA DE LEAD (LGPD) ---
+        async function syncLead() {
+            const name = document.getElementById('cust-name').value;
+            const email = document.getElementById('cust-email').value;
+            if(!email.includes('@')) return;
+
+            const payload = {
+                action: 'create_customer',
+                consent: document.getElementById('lgpd-consent').checked,
+                firstname: name.split(' ')[0],
+                lastname: name.split(' ').slice(1).join(' '),
+                email: email,
+                telephone: document.getElementById('cust-phone').value,
+                postcode: document.getElementById('cust-cep').value,
+                custom_txt: "Lead Atacado via Modal",
+                products: cart.map(item => ({ product_sku: item.name, product_qty: 1 }))
+            };
+
+            try {
+                await fetch(awsEndpoint, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+            } catch (e) { console.warn("Lead sync offline"); }
+        }
+
+        async function confirmarDadosAppmax() {
+            const name = document.getElementById('cust-name').value;
+            const email = document.getElementById('cust-email').value;
+            const cpf = document.getElementById('cust-cpf').value;
+            const consent = document.getElementById('lgpd-consent').checked;
+
+            if(!name || !email || !cpf) { alert("Preencha os campos obrigatórios."); return; }
+            if(!consent) { alert("Você precisa aceitar os termos da LGPD."); return; }
+            
+            customerData = { 
+                name, email, cpf, 
+                phone: document.getElementById('cust-phone').value,
+                method: selectedMethod
+            };
+
+            if(selectedMethod === 'card') {
+                customerData.card = {
+                    number: document.getElementById('card-number').value,
+                    month: document.getElementById('card-month').value,
+                    year: document.getElementById('card-year').value,
+                    cvv: document.getElementById('card-cvv').value,
+                    installments: document.getElementById('card-installments').value
+                };
             }
+
+            finalizarPagamentoAppmax();
+        }
+
+        function addWithAttrs(name, price, img, id) {
+            const color = document.getElementById(`color-${id}`).value;
+            const size = document.getElementById(`size-${id}`).value;
+            cart.push({name: `${name} (${color}/${size})`, price, img});
+            updateCart();
+            toggleCart();
         }
 
         function updateCart() {
-            const cartContent = document.getElementById('cart-content');
-            const cartCount = document.getElementById('cart-count');
-            const cartTotal = document.getElementById('cart-total');
-            const btn = document.getElementById('btn-checkout');
+            const content = document.getElementById('cart-content');
+            const totalEl = document.getElementById('cart-total');
             const msg = document.getElementById('min-order-msg');
+            const btn = document.getElementById('btn-checkout-appmax');
+            let total = 0;
+            content.innerHTML = cart.length ? '' : '<p class="text-center py-10 text-[10px] uppercase font-bold text-gray-400 tracking-widest">Sua sacola está vazia</p>';
             
-            if(cart.length === 0) {
-                cartContent.innerHTML = '<p class="text-gray-400 py-10 text-center uppercase text-[10px]">Sua sacola está vazia.</p>';
-                total = 0;
-            } else {
-                cartContent.innerHTML = '';
-                total = 0;
-                cart.forEach((item, index) => {
-                    total += item.price;
-                    cartContent.innerHTML += `
-                        <div class="flex gap-4 items-center border-b pb-4">
-                            <img src="${item.img}" class="w-12 h-16 object-cover bg-gray-50">
-                            <div class="flex-1 text-left">
-                                <h4 class="text-[10px] font-bold uppercase leading-tight">${item.name}</h4>
-                                <p class="text-pink-600 font-bold text-sm">R$ ${item.price.toFixed(2)}</p>
-                                <button onclick="removeItem(${index})" class="text-[9px] text-gray-400 underline uppercase mt-1">Remover</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            cartCount.innerText = cart.length;
-            cartTotal.innerText = `R$ ${total.toFixed(2)}`;
-
+            cart.forEach((item, i) => {
+                total += item.price;
+                content.innerHTML += `
+                <div class="flex gap-4 border-b pb-3 items-center group">
+                    <img src="${item.img}" class="w-12 h-16 object-cover rounded-xl shadow-md border border-gray-100">
+                    <div class="flex-1">
+                        <p class="text-[9px] font-bold uppercase tracking-tighter text-gray-800">${item.name}</p>
+                        <p class="text-pink-600 font-bold text-sm">R$ ${item.price.toFixed(2)}</p>
+                    </div>
+                </div>`;
+            });
+            
+            totalEl.innerText = `R$ ${total.toFixed(2)}`;
+            document.getElementById('cart-count').innerText = cart.length;
             if(total >= MIN_ORDER) {
-                btn.disabled = false;
-                btn.classList.remove('bg-gray-300', 'cursor-not-allowed');
-                btn.classList.add('bg-black', 'hover:bg-gray-800');
-                msg.innerText = "✓ Pedido mínimo atingido!";
-                msg.classList.remove('text-red-600', 'bg-gray-100');
-                msg.classList.add('text-green-600', 'bg-green-50');
+                msg.innerText = "✓ Pedido Mínimo Atingido"; msg.className = "text-green-600 p-3 text-center font-bold uppercase text-[10px]";
+                btn.disabled = false; btn.className = "w-full bg-blue-700 text-white py-4 font-bold uppercase text-[12px] shadow-xl hover:bg-blue-800 transition-all rounded-2xl";
             } else {
-                btn.disabled = true;
-                const falta = MIN_ORDER - total;
-                btn.classList.add('bg-gray-300', 'cursor-not-allowed');
-                btn.classList.remove('bg-black');
-                msg.innerText = `Faltam R$ ${falta.toFixed(2)} para o mínimo`;
-                msg.classList.add('text-red-600', 'bg-gray-100');
-                msg.classList.remove('text-green-600', 'bg-green-50');
+                msg.innerText = `Faltam R$ ${(MIN_ORDER - total).toFixed(2)} para o atacado`; msg.className = "text-red-600 p-3 text-center font-bold uppercase text-[10px]";
+                btn.disabled = true; btn.className = "w-full bg-gray-300 text-white py-4 font-bold uppercase text-[12px] cursor-not-allowed rounded-2xl";
             }
         }
 
-   
+        async function finalizarPagamentoAppmax() {
+            const btnCheckout = document.querySelector('#payment-modal button');
+            const originalText = btnCheckout.innerText;
+            btnCheckout.innerText = "PROCESSANDO...";
+            btnCheckout.disabled = true;
+
+            try {
+                const payload = {
+                    action: 'checkout', // Identificador para a Lambda
+                    consent: true,
+                    method: selectedMethod,
+                    customer: {
+                        name: customerData.name,
+                        email: customerData.email,
+                        cpf: customerData.cpf,
+                        phone: customerData.phone
+                    },
+                    products: cart.map(item => ({ name: item.name, qty: 1, price: item.price })),
+                    payment: customerData.card || {}
+                };
+
+                const response = await fetch(awsEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.success && result.response.data) {
+                    const data = result.response.data;
+                    alert("Pedido Criado com Sucesso!");
+                    if (data.checkout_url) window.location.href = data.checkout_url;
+                } else {
+                    alert("Erro: " + (result.response.message || "Tente novamente"));
+                }
+            } catch (error) {
+                alert("Erro técnico na conexão. Tente novamente mais tarde.");
+            } finally {
+                btnCheckout.innerText = originalText;
+                btnCheckout.disabled = false;
+            }
+        }
+
+        const slides = document.querySelectorAll('#main-carousel img');
+        let cur = 0;
+        setInterval(() => {
+            slides[cur].classList.remove('active');
+            cur = (cur + 1) % slides.length;
+            slides[cur].classList.add('active');
+        }, 4500);
+
+        initProducts();
     </script>
     
 </body>
