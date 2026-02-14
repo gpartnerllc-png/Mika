@@ -447,56 +447,7 @@ async function finalizarPagamentoDireto() {
         return;
     }
 
-    // 1. Cálculo do Valor Formatado para o Payload
-    const totalFloat = cart.reduce((sum, item) => sum + item.price, 0);
-    const valorFormatado = totalFloat.toFixed(2).replace('.', ''); // Ex: 700.50 -> 70050
-    const valorExibicao = totalFloat.toFixed(2);
-
-    // 2. Gerar o Payload PIX (Estático/Dinâmico Simples)
-    // Nota: O tamanho do campo de valor precisa ser dinâmico no padrão EMV
-    const lenValor = valorExibicao.length.toString().padStart(2, '0');
-    const payloadPix = `00020101021226580014br.gov.bcb.pix0114${CHAVE_PIX}52040000530398654${lenValor}${valorExibicao}5802BR5913${NOME_RECEBEDOR.replace(/\s/g, '')}6008${CIDADE_RECEBEDOR}62070503***6304`;
-
-    // 3. Sincronizar Lead em background (Opcional, não trava se falhar)
-    syncLead().catch(() => console.log("Lead offline, seguindo..."));
-
-    // 4. Interface de Sucesso (Visual 3D)
-    const btnArea = document.querySelector('#payment-modal .space-y-3');
-    btnArea.innerHTML = `
-        <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-green-500 animate-pulse">
-            <p class="text-[10px] font-bold text-center text-green-600 mb-2 uppercase">PIX Gerado com Sucesso!</p>
-            <textarea id="pixCode" readonly class="w-full text-[10px] p-2 bg-white border rounded-lg h-20 mb-2 font-mono">${payloadPix}</textarea>
-            <button onclick="copyPix()" class="w-full bg-black text-white py-3 rounded-xl font-bold text-[11px] mb-2 uppercase">
-                <i class="fa-solid fa-copy"></i> Copiar Código PIX
-            </button>
-        </div>
-        
-        <button onclick="enviarWhatsAppConfirmado('${valorExibicao}')" class="w-full bg-[#25D366] text-white py-4 rounded-2xl font-bold uppercase text-[12px] shadow-lg flex items-center justify-center gap-2">
-            <i class="fa-brands fa-whatsapp text-xl"></i> Já paguei! Enviar Pedido
-        </button>
-    `;
-}
-
-function copyPix() {
-    const copyText = document.getElementById("pixCode");
-    copyText.select();
-    copyText.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(copyText.value);
-    alert("Código PIX copiado! Cole no seu banco.");
-}
-
-function enviarWhatsAppConfirmado(total) {
-    const fone = "5561983446343";
-    let msg = `*COMPROVANTE DE PEDIDO - MIQUELY MODAS*\n`;
-    msg += `*Cliente:* ${document.getElementById('cust-name').value}\n`;
-    msg += `------------------------------\n`;
-    cart.forEach(item => msg += `• ${item.name} - R$ ${item.price.toFixed(2)}\n`);
-    msg += `------------------------------\n`;
-    msg += `*VALOR PAGO: R$ ${total}*\n`;
-    msg += `_Estou enviando o comprovante em anexo._`;
-    
-    window.open(`https://api.whatsapp.com/send?phone=${fone}&text=${encodeURIComponent(msg)}`);
-}
+   
     </script>
     
 </body>
