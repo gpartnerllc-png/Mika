@@ -178,11 +178,7 @@
     </footer>
 
     <script>
-        const MARGEM_LUCRO = 1.50; 
-        const MIN_ORDER = 800;        
-        let cart = [];
-        let customerData = {}; 
-        let selectedMethod = 'pix';
+       
 
         function initProducts() {
             const list = document.getElementById('product-list');
@@ -192,7 +188,7 @@
             list.innerHTML += generateHTML('Calcinha Fio de Renda', p1Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/8/1002_preto_(1).jpg', 'manual-1');
             const p2Base = 65.77;
             const p2Calc = p2Base * MARGEM_LUCRO;
-            list.innerHTML += generateHTML('Sutiã Toamra qCaia', p2Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716828210.jpeg', 'manual-2');
+            list.innerHTML += generateHTML('Sutiã Tomara qCaia', p2Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716828210.jpeg', 'manual-2');
             const p3Base = 77.67;
             const p3Calc = p3Base * MARGEM_LUCRO;
             list.innerHTML += generateHTML('Conjunto Short Doll', p3Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/9/20230313152013whatsapp_image_2023-03-13_at_15.17.49_e.jpg', 'manual-3');
@@ -318,13 +314,13 @@
             list.innerHTML += generateHTML('Bore Manga Longa', p43Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/30/20250820162500_intuicao3_32_e.jpg', 'manual-43');
             const p44Base = 47.40;
             const p44Calc = p44Base * MARGEM_LUCRO;
-            list.innerHTML += generateHTML('Sutiã Amamentação s/Custura', p44Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/6/20220307160240whatsapp_image_2022-03-07_at_14.56.51_e.jpg', 'manual-44');
+            list.innerHTML += generateHTML('Sutiã Amamentação s/Costura', p44Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/6/20220307160240whatsapp_image_2022-03-07_at_14.56.51_e.jpg', 'manual-44');
             const p45Base = 49.64;
             const p45Calc = p45Base * MARGEM_LUCRO;
-            list.innerHTML += generateHTML('Sutiã Amamentação Bojo s/Custura', p45Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1717558113.jpeg', 'manual-45');
+            list.innerHTML += generateHTML('Sutiã Amamentação Bojo s/Costura', p45Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1717558113.jpeg', 'manual-45');
             const p46Base = 54.98;
             const p46Calc = p46Base * MARGEM_LUCRO;
-            list.innerHTML += generateHTML('Sutiã Amamentação c/Renda s/Custura', p46Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716580958.jpeg', 'manual-46');
+            list.innerHTML += generateHTML('Sutiã Amamentação c/Renda s/Costura', p46Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716580958.jpeg', 'manual-46');
             const p47Base = 52.45;
             const p47Calc = p47Base * MARGEM_LUCRO;
             list.innerHTML += generateHTML('Sutiã Adesivo', p47Calc, 'https://imagens.viashopmoda.com.br/upload/Goiania_Intuicao/colecoes/18/uploadapi_1716578271.jpeg', 'manual-47');
@@ -362,11 +358,13 @@
                                         
 
    <script>
+        const MARGEM_LUCRO = 1.50; 
+        const MIN_ORDER = 800;        
+        let cart = [];
+        let customerData = {}; 
+        let selectedMethod = 'pix';            
     // --- 1. CONFIGURAÇÕES GLOBAIS (SEM LAMBDA) ---
-    const MIN_ORDER = 700;
     const CHAVE_PIX = "47149826000180"; // Seu CNPJ
-    let cart = [];
-    let selectedMethod = 'pix';
     let customerData = {};
 
     function generateHTML(name, price, img, id) {
