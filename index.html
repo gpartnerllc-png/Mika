@@ -422,31 +422,6 @@
             }
         }
 
-        function removeItem(index) {
-            cart.splice(index, 1);
-            updateCart();
-        }
-
-        function goToCheckout() {
-            const checkoutUrl = "https://seu-checkout.yampi.com.br/finalizar"; 
-            window.location.href = checkoutUrl;
-        }
-
-        // Configurações Fixas
-const CHAVE_PIX = "47149826000180"; // Seu CNPJ
-const NOME_RECEBEDOR = "MIQUELY MODAS";
-const CIDADE_RECEBEDOR = "BRASILIA";
-
-async function finalizarPagamentoDireto() {
-    const name = document.getElementById('cust-name').value;
-    const email = document.getElementById('cust-email').value;
-    const phone = document.getElementById('cust-phone').value;
-
-    if (!name || !email || !phone) {
-        alert("Preencha seus dados para gerar o PIX.");
-        return;
-    }
-
    
     </script>
     
