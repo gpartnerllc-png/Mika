@@ -361,6 +361,14 @@
            
                                         
 
+   <script>
+    // --- 1. CONFIGURAÇÕES GLOBAIS (SEM LAMBDA) ---
+    const MIN_ORDER = 700;
+    const CHAVE_PIX = "47149826000180"; // Seu CNPJ
+    let cart = [];
+    let selectedMethod = 'pix';
+    let customerData = {};
+
     function generateHTML(name, price, img, id) {
         return `
         <div class="product-card group">
@@ -396,58 +404,64 @@
         document.getElementById('card-fields').classList.toggle('hidden', method !== 'card');
     }
 
-    async function syncLead() {
+    // --- FUNÇÃO DE FINALIZAÇÃO DIRETA (PIX + WHATSAPP) ---
+    function confirmarDados() {
         const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
         const email = document.getElementById('cust-email').value;
-        if(!email.includes('@')) return;
 
-        const payload = {
-            action: 'create_customer',
-            consent: document.getElementById('lgpd-consent').checked,
-            firstname: name.split(' ')[0],
-            lastname: name.split(' ').slice(1).join(' ') || 'Cliente',
-            email: email,
-            telephone: document.getElementById('cust-phone').value,
-            postcode: document.getElementById('cust-cep').value,
-            custom_txt: "Lead Atacado via Modal",
-            products: cart.map(item => ({ product_sku: item.name, product_qty: 1 }))
-        };
+        if(!name || !phone || !email) { alert("Preencha Nome, Telefone e E-mail."); return; }
 
-        try {
-            await fetch(awsEndpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-        } catch (e) { console.warn("Lead sync offline"); }
+        const totalFloat = cart.reduce((sum, item) => sum + item.price, 0);
+        const valorExibicao = totalFloat.toFixed(2);
+        
+        // Geração do Payload PIX Estático (Copia e Cola)
+        const payloadPix = `00020101021226580014br.gov.bcb.pix0114${CHAVE_PIX}52040000530398654${valorExibicao.length.toString().padStart(2, '0')}${valorExibicao}5802BR5913MIQUELYMODAS6008BRASILIA62070503***6304`;
+
+        // Troca o conteúdo do Modal para exibir o PIX
+        const modalContent = document.querySelector('#payment-modal .max-w-md');
+        modalContent.innerHTML = `
+            <div class="bg-white p-8 rounded-3xl text-center shadow-2xl border-4 border-pink-100">
+                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-check text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-bold uppercase mb-2">Pedido Quase Pronto!</h2>
+                <p class="text-[11px] text-gray-500 mb-6 font-bold uppercase">Copie o código PIX abaixo para pagar:</p>
+                
+                <textarea id="pixCode" readonly class="w-full text-[10px] p-4 bg-gray-50 border-2 border-dashed rounded-2xl h-24 mb-4 font-mono text-gray-600">${payloadPix}</textarea>
+                
+                <button onclick="copyPix()" class="w-full bg-black text-white py-4 rounded-2xl font-bold text-[12px] mb-4 uppercase hover:scale-95 transition-transform">
+                    <i class="fa-solid fa-copy mr-2"></i> Copiar Código PIX
+                </button>
+
+                <button onclick="enviarWhatsApp('${valorExibicao}')" class="w-full bg-[#25D366] text-white py-4 rounded-2xl font-bold uppercase text-[12px] shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-xl"></i> Já paguei! Enviar Comprovante
+                </button>
+                
+                <button onclick="location.reload()" class="mt-4 text-[10px] text-gray-400 font-bold uppercase underline">Cancelar e Voltar</button>
+            </div>
+        `;
     }
 
-    async function confirmarDados() {
-        const name = document.getElementById('cust-name').value;
-        const email = document.getElementById('cust-email').value;
-        const cpf = document.getElementById('cust-cpf').value;
-        const consent = document.getElementById('lgpd-consent').checked;
+    function copyPix() {
+        const copyText = document.getElementById("pixCode");
+        copyText.select();
+        navigator.clipboard.writeText(copyText.value);
+        alert("Código PIX copiado! Agora abra seu banco e pague.");
+    }
 
-        if(!name || !email || !cpf) { alert("Preencha os campos obrigatórios."); return; }
-        if(!consent) { alert("Você precisa aceitar os termos da LGPD."); return; }
+    function enviarWhatsApp(total) {
+        const fone = "5561983446343";
+        const nome = document.getElementById('cust-name').value;
+        let msg = `*NOVO PEDIDO - MIQUELY MODAS*\n`;
+        msg += `*Cliente:* ${nome}\n`;
+        msg += `*Total:* R$ ${total}\n`;
+        msg += `------------------------------\n`;
+        cart.forEach(item => msg += `• ${item.name}\n`);
+        msg += `------------------------------\n`;
+        msg += `_Estou enviando o comprovante do PIX em anexo._`;
         
-        customerData = { 
-            name, email, cpf, 
-            phone: document.getElementById('cust-phone').value,
-            method: selectedMethod
-        };
-
-        if(selectedMethod === 'card') {
-            customerData.card = {
-                number: document.getElementById('card-number').value,
-                month: document.getElementById('card-month').value,
-                year: document.getElementById('card-year').value,
-                cvv: document.getElementById('card-cvv').value,
-                installments: document.getElementById('card-installments').value
-            };
-        }
-
-        finalizarPagamentoInfinitePay();
+        window.open(`https://api.whatsapp.com/send?phone=${fone}&text=${encodeURIComponent(msg)}`);
     }
 
     function addWithAttrs(name, price, img, id) {
@@ -464,15 +478,16 @@
         const msg = document.getElementById('min-order-msg');
         const btn = document.getElementById('btn-checkout-appmax');
         let total = 0;
+        
         content.innerHTML = cart.length ? '' : '<p class="text-center py-10 text-[10px] uppercase font-bold text-gray-400 tracking-widest">Sua sacola está vazia</p>';
         
         cart.forEach((item, i) => {
             total += item.price;
             content.innerHTML += `
-            <div class="flex gap-4 border-b pb-3 items-center group">
-                <img src="${item.img}" class="w-12 h-16 object-cover rounded-xl shadow-md border border-gray-100" onerror="this.src='https://via.placeholder.com/150'">
+            <div class="flex gap-4 border-b pb-3 items-center">
+                <img src="${item.img}" class="w-12 h-16 object-cover rounded-xl shadow-md" onerror="this.src='https://via.placeholder.com/150'">
                 <div class="flex-1">
-                    <p class="text-[9px] font-bold uppercase tracking-tighter text-gray-800">${item.name}</p>
+                    <p class="text-[9px] font-bold uppercase text-gray-800">${item.name}</p>
                     <p class="text-pink-600 font-bold text-sm">R$ ${item.price.toFixed(2)}</p>
                 </div>
             </div>`;
@@ -480,60 +495,15 @@
         
         totalEl.innerText = `R$ ${total.toFixed(2)}`;
         document.getElementById('cart-count').innerText = cart.length;
+
         if(total >= MIN_ORDER) {
-            msg.innerText = "✓ Pedido Mínimo Atingido"; msg.className = "text-green-600 p-3 text-center font-bold uppercase text-[10px]";
-            btn.disabled = false; btn.className = "w-full bg-blue-700 text-white py-4 font-bold uppercase text-[12px] shadow-xl hover:bg-blue-800 transition-all rounded-2xl";
+            msg.innerText = "✓ Pedido Mínimo Atingido"; 
+            msg.className = "text-green-600 p-3 text-center font-bold uppercase text-[10px]";
+            btn.disabled = false; btn.className = "w-full bg-black text-white py-4 font-bold uppercase text-[12px] shadow-xl rounded-2xl";
         } else {
-            msg.innerText = `Faltam R$ ${(MIN_ORDER - total).toFixed(2)} para o atacado`; msg.className = "text-red-600 p-3 text-center font-bold uppercase text-[10px]";
+            msg.innerText = `Faltam R$ ${(MIN_ORDER - total).toFixed(2)} para o atacado`; 
+            msg.className = "text-red-600 p-3 text-center font-bold uppercase text-[10px]";
             btn.disabled = true; btn.className = "w-full bg-gray-300 text-white py-4 font-bold uppercase text-[12px] cursor-not-allowed rounded-2xl";
-        }
-    }
-
-    async function finalizarPagamentoInfinitePay() {
-        const btnCheckout = document.querySelector('#payment-modal .btn-finalizar') || document.querySelector('#payment-modal button');
-        const originalText = btnCheckout.innerText;
-        btnCheckout.innerText = "GERANDO PAGAMENTO...";
-        btnCheckout.disabled = true;
-
-        await syncLead(); // Captura o lead antes de ir para o checkout
-
-        try {
-            const payload = {
-                action: 'checkout_infinitepay', 
-                handle: "partner12",
-                method: selectedMethod,
-                customer: {
-                    name: customerData.name,
-                    email: customerData.email,
-                    cpf: customerData.cpf,
-                    phone: customerData.phone
-                },
-                items: cart.map(item => ({ 
-                    name: item.name, 
-                    qty: 1, 
-                    price: Math.round(item.price * 100) // Formato InfinitePay
-                })),
-                payment: customerData.card || {}
-            };
-
-            const response = await fetch(awsEndpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            const result = await response.json();
-
-            if (result.success && result.url) {
-                window.location.href = result.url;
-            } else {
-                alert("Erro ao processar: " + (result.message || "Verifique os dados e tente novamente."));
-            }
-        } catch (error) {
-            alert("Erro técnico na conexão. Verifique sua internet.");
-        } finally {
-            btnCheckout.innerText = originalText;
-            btnCheckout.disabled = false;
         }
     }
 
@@ -547,10 +517,7 @@
             slides[cur].classList.add('active');
         }, 4500);
     }
-
-    // Inicialização (se houver função initProducts definida)
-    if (typeof initProducts === "function") initProducts();
 </script>
-    
 </body>
+
 </html>
